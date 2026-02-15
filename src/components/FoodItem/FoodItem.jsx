@@ -1,0 +1,116 @@
+import React, { useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { StoreContext } from '../../context/StoreContext'
+
+const FoodItem = ({ id, name, price, description, image, veg, inStock = true }) => {
+
+    const { cartItems, addToCart, removeFromCart, url, wishlistItems, addToWishlist } = useContext(StoreContext);
+    const navigate = useNavigate();
+
+    const handleOrderNow = () => {
+        if (!inStock) return;
+        addToCart(id);
+        navigate('/cart');
+    }
+
+    return (
+        <div className={`group w-full m-auto rounded-[24px] shadow-md hover:shadow-2xl bg-white transition-all duration-300 animate-fadeIn relative flex flex-col overflow-hidden hover:-translate-y-2 border border-transparent hover:border-orange-100 ${!inStock ? 'opacity-90' : ''}`}>
+            {/* Status Badge */}
+            <div className={`absolute top-4 left-4 z-20 px-3 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider shadow-sm backdrop-blur-sm
+                ${inStock ? 'bg-green-100/90 text-green-700' : 'bg-red-100/90 text-red-700'}`}>
+                {inStock ? '● In Stock' : '● Out of Stock'}
+            </div>
+
+            {/* Cart Actions Overlay - Visible on Hover for Desktop, always visible if item in cart */}
+            {inStock && (
+                <div className='absolute top-4 right-4 z-20'>
+                    {!cartItems[id] ? (
+                        <div
+                            onClick={() => addToCart(id)}
+                            className='w-10 h-10 bg-white rounded-full flex items-center justify-center text-xl shadow-lg cursor-pointer hover:bg-orange-50 transition-colors duration-200 group-hover:scale-110'
+                            title="Add to Cart"
+                        >
+                            <span className="text-gray-500 hover:text-orange-500 font-bold text-2xl pb-1">+</span>
+                        </div>
+                    ) : (
+                        <div className='flex items-center gap-2 bg-white/95 backdrop-blur-sm p-1.5 rounded-full shadow-xl border border-orange-100 animate-fadeIn'>
+                            <div onClick={() => removeFromCart(id)} className='cursor-pointer text-red-500 bg-red-50 hover:bg-red-100 w-8 h-8 flex items-center justify-center rounded-full transition-colors font-bold'>-</div>
+                            <p className='text-sm font-bold w-4 text-center'>{cartItems[id]}</p>
+                            <div onClick={() => addToCart(id)} className='cursor-pointer text-green-500 bg-green-50 hover:bg-green-100 w-8 h-8 flex items-center justify-center rounded-full transition-colors font-bold'>+</div>
+                        </div>
+                    )}
+                </div>
+            )}
+
+            <div className="relative overflow-hidden h-[220px] md:h-[240px] w-full bg-gray-100">
+                <img
+                    className={`w-full h-full object-cover transition-transform duration-700 ${inStock ? 'group-hover:scale-110' : 'grayscale-[0.5]'}`}
+                    src={image.startsWith("http") ? image : url + "/images/" + image}
+                    alt={name}
+                />
+                {!inStock && (
+                    <div className='absolute inset-0 bg-black/40 flex items-center justify-center backdrop-blur-[2px] z-10'>
+                        <span className="bg-white/90 text-red-600 px-4 py-2 rounded-lg font-extrabold text-sm uppercase tracking-widest shadow-lg rotate-[-12deg] border-2 border-red-500">
+                            Sold Out
+                        </span>
+                    </div>
+                )}
+                {/* Gradient Overlay for better text visibility if we overlay text, but here mostly for visual depth */}
+                <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </div>
+
+            <div className="p-5 md:p-6 flex flex-col flex-1 gap-3">
+                <div className="flex flex-col gap-1">
+                    <div className="flex justify-between items-start gap-2">
+                        <h3 className='text-lg md:text-xl font-extrabold text-gray-800 line-clamp-1 leading-tight group-hover:text-orange-600 transition-colors'>
+                            {name}
+                        </h3>
+                        <div className={`flex-shrink-0 mt-1 w-4 h-4 border-[1.5px] p-[1.5px] flex justify-center items-center ${veg ? "border-green-600" : "border-red-600"}`}>
+                            <div className={`w-full h-full rounded-full ${veg ? "bg-green-600" : "bg-red-600"}`}></div>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-1">
+                        <img className='h-3 md:h-4 w-auto object-contain opacity-80' src="https://raw.githubusercontent.com/avinashdm/food-del/main/frontend/src/assets/rating_starts.png" alt="Rating" />
+                        <span className='text-xs text-gray-400 font-medium ml-1'>(4.5)</span>
+                    </div>
+                </div>
+
+                <p className='text-gray-500 text-xs md:text-sm line-clamp-2 leading-relaxed min-h-[2.5em]'>
+                    {description}
+                </p>
+
+                <div className="mt-auto pt-4 flex flex-col gap-4">
+                    <p className='text-orange-600 text-2xl md:text-3xl font-black tracking-tight'>
+                        ${price}
+                    </p>
+
+                    <div className='flex flex-col sm:flex-row gap-3 w-full'>
+                        <button
+                            disabled={!inStock}
+                            onClick={() => addToCart(id)}
+                            className={`flex-1 py-3 rounded-xl font-bold text-sm md:text-base border-2 transition-all duration-300 transform active:scale-95
+                                ${inStock
+                                    ? 'border-orange-500 text-orange-600 hover:bg-orange-50'
+                                    : 'border-gray-200 text-gray-300 cursor-not-allowed'}`}
+                        >
+                            Add to Cart
+                        </button>
+                        <button
+                            disabled={!inStock}
+                            onClick={handleOrderNow}
+                            className={`flex-1 py-3 rounded-xl font-bold text-sm md:text-base shadow-md transition-all duration-300 transform active:scale-95
+                                ${inStock
+                                    ? 'bg-orange-500 text-white hover:bg-orange-600 hover:shadow-orange-200'
+                                    : 'bg-gray-200 text-white cursor-not-allowed shadow-none'}`}
+                        >
+                            Order Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+
+export default FoodItem

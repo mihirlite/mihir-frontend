@@ -1,0 +1,71 @@
+.notification-dropdown {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 320px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 1.5rem;
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    overflow: hidden;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.notification-header {
+    padding: 0.5rem;
+    font-weight: 800;
+    color: #f97316;
+    border-bottom: 1px solid #f3f4f6;
+    margin-bottom: 0.5rem;
+}
+
+.notification-list {
+    max-height: 400px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.notification-item {
+    padding: 1rem;
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 13px;
+    line-height: 1.4;
+    border-bottom: 1px solid #f9fafb;
+}
+
+.notification-item.unread {
+    background: #fff7ed;
+    color: #431407;
+    font-weight: 600;
+}
+
+.notification-item:hover {
+    background: #fdf2f8;
+    transform: translateX(5px);
+}
+
+.notification-item .notif-date {
+    font-size: 10px;
+    color: #94a3b8;
+    margin-top: 5px;
+    display: block;
+}
+
+.notif-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ef4444;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 2px solid white;
+}
