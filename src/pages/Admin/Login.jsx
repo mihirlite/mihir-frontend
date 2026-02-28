@@ -18,17 +18,21 @@ const Login = ({ setToken, url }) => {
     const onLoginHandler = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.post(url + "/api/user/admin-login", data);
+            const loginUrl = `${url.replace(/\/$/, "")}/api/user/admin-login`;
+            console.log("Attempting admin login at:", loginUrl);
+            const response = await axios.post(loginUrl, data);
+
             if (response.data.success) {
                 setToken(response.data.token);
                 localStorage.setItem("admin-token", response.data.token);
                 toast.success("Welcome back, Admin!");
             } else {
+                console.warn("Admin login failed:", response.data.message);
                 toast.error(response.data.message);
             }
         } catch (error) {
-            console.error(error);
-            toast.error("Login Error");
+            console.error("Admin Login Frontend Error:", error);
+            toast.error(error.response?.data?.message || "Login Error");
         }
     }
 
@@ -45,7 +49,7 @@ const Login = ({ setToken, url }) => {
                             <MdOutlineAdminPanelSettings className='text-4xl text-white' />
                         </div>
                         <h2 className='text-3xl font-black text-gray-800 tracking-tight'>Admin Portal</h2>
-                        <p className='text-gray-400 font-medium mt-2'>Secure access for LiteKitchen</p>
+                        <p className='text-gray-400 font-medium mt-2'>Secure access for Flavohub</p>
                     </div>
 
                     <form onSubmit={onLoginHandler} className='flex flex-col gap-6'>

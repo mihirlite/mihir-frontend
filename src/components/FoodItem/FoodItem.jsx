@@ -4,13 +4,25 @@ import { StoreContext } from '../../context/StoreContext'
 
 const FoodItem = ({ id, name, price, description, image, veg, inStock = true }) => {
 
-    const { cartItems, addToCart, removeFromCart, url, wishlistItems, addToWishlist } = useContext(StoreContext);
+    const { cartItems, addToCart, removeFromCart, url, wishlistItems, addToWishlist, token, setShowLogin } = useContext(StoreContext);
     const navigate = useNavigate();
 
     const handleOrderNow = () => {
         if (!inStock) return;
+        if (!token) {
+            setShowLogin(true);
+            return;
+        }
         addToCart(id);
         navigate('/cart');
+    }
+
+    const handleAddToCart = () => {
+        if (!token) {
+            setShowLogin(true);
+            return;
+        }
+        addToCart(id);
     }
 
     return (
@@ -21,28 +33,8 @@ const FoodItem = ({ id, name, price, description, image, veg, inStock = true }) 
                 {inStock ? '● In Stock' : '● Out of Stock'}
             </div>
 
-            {/* Cart Actions Overlay - Visible on Hover for Desktop, always visible if item in cart */}
-            {inStock && (
-                <div className='absolute top-4 right-4 z-20'>
-                    {!cartItems[id] ? (
-                        <div
-                            onClick={() => addToCart(id)}
-                            className='w-10 h-10 bg-white rounded-full flex items-center justify-center text-xl shadow-lg cursor-pointer hover:bg-orange-50 transition-colors duration-200 group-hover:scale-110'
-                            title="Add to Cart"
-                        >
-                            <span className="text-gray-500 hover:text-orange-500 font-bold text-2xl pb-1">+</span>
-                        </div>
-                    ) : (
-                        <div className='flex items-center gap-2 bg-white/95 backdrop-blur-sm p-1.5 rounded-full shadow-xl border border-orange-100 animate-fadeIn'>
-                            <div onClick={() => removeFromCart(id)} className='cursor-pointer text-red-500 bg-red-50 hover:bg-red-100 w-8 h-8 flex items-center justify-center rounded-full transition-colors font-bold'>-</div>
-                            <p className='text-sm font-bold w-4 text-center'>{cartItems[id]}</p>
-                            <div onClick={() => addToCart(id)} className='cursor-pointer text-green-500 bg-green-50 hover:bg-green-100 w-8 h-8 flex items-center justify-center rounded-full transition-colors font-bold'>+</div>
-                        </div>
-                    )}
-                </div>
-            )}
-
-            <div className="relative overflow-hidden h-[220px] md:h-[240px] w-full bg-gray-100">
+            {/* Food Image */}
+            <div className="relative overflow-hidden h-[180px] xs:h-[220px] md:h-[240px] w-full bg-gray-100">
                 <img
                     className={`w-full h-full object-cover transition-transform duration-700 ${inStock ? 'group-hover:scale-110' : 'grayscale-[0.5]'}`}
                     src={image.startsWith("http") ? image : url + "/images/" + image}
@@ -55,11 +47,11 @@ const FoodItem = ({ id, name, price, description, image, veg, inStock = true }) 
                         </span>
                     </div>
                 )}
-                {/* Gradient Overlay for better text visibility if we overlay text, but here mostly for visual depth */}
                 <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </div>
 
-            <div className="p-5 md:p-6 flex flex-col flex-1 gap-3">
+            {/* Card Body */}
+            <div className="p-4 xs:p-5 md:p-6 flex flex-col flex-1 gap-3">
                 <div className="flex flex-col gap-1">
                     <div className="flex justify-between items-start gap-2">
                         <h3 className='text-lg md:text-xl font-extrabold text-gray-800 line-clamp-1 leading-tight group-hover:text-orange-600 transition-colors'>
@@ -79,11 +71,35 @@ const FoodItem = ({ id, name, price, description, image, veg, inStock = true }) 
                     {description}
                 </p>
 
-                <div className="mt-auto pt-4 flex flex-col gap-4">
-                    <p className='text-orange-600 text-2xl md:text-3xl font-black tracking-tight'>
-                        ${price}
-                    </p>
+                <div className="mt-auto pt-3 flex flex-col gap-3">
 
+                    {/* Price row + inline counter */}
+                    <div className="flex items-center justify-between gap-2">
+                        <p className='text-orange-600 text-lg xs:text-xl md:text-2xl font-black tracking-tight'>
+                            ₹{price}
+                        </p>
+
+                        {inStock && (
+                            <div className='flex items-center gap-1.5 bg-gray-50 border border-gray-200 p-1 rounded-full'>
+                                <div
+                                    onClick={() => cartItems && cartItems[id] && removeFromCart(id)}
+                                    className={`w-8 h-8 flex items-center justify-center rounded-full font-bold text-lg select-none transition-colors
+                                        ${cartItems && cartItems[id]
+                                            ? 'cursor-pointer text-red-500 bg-red-50 hover:bg-red-100'
+                                            : 'text-gray-300 bg-gray-100 cursor-default'}`}
+                                >−</div>
+                                <p className='text-sm font-bold w-5 text-center text-gray-800'>
+                                    {(cartItems && cartItems[id]) || 1}
+                                </p>
+                                <div
+                                    onClick={handleAddToCart}
+                                    className='cursor-pointer text-green-600 bg-green-50 hover:bg-green-100 w-8 h-8 flex items-center justify-center rounded-full transition-colors font-bold text-lg select-none'
+                                >+</div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Action Buttons */}
                     <div className='flex flex-col sm:flex-row gap-3 w-full'>
                         <button
                             disabled={!inStock}
@@ -98,7 +114,7 @@ const FoodItem = ({ id, name, price, description, image, veg, inStock = true }) 
                         <button
                             disabled={!inStock}
                             onClick={handleOrderNow}
-                            className={`flex-1 py-3 rounded-xl font-bold text-sm md:text-base shadow-md transition-all duration-300 transform active:scale-95
+                            className={`flex-1 py-2.5 xs:py-3 rounded-xl font-bold text-xs xs:text-sm md:text-base shadow-md transition-all duration-300 transform active:scale-95
                                 ${inStock
                                     ? 'bg-orange-500 text-white hover:bg-orange-600 hover:shadow-orange-200'
                                     : 'bg-gray-200 text-white cursor-not-allowed shadow-none'}`}

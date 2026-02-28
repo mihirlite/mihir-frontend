@@ -11,13 +11,15 @@ import MyOrders from './pages/MyOrders/MyOrders'
 import TrackOrder from './pages/TrackOrder/TrackOrder'
 import Admin from './pages/Admin/Admin'
 import Wishlist from './pages/Wishlist/Wishlist'
+import ResetPassword from './pages/ResetPassword/ResetPassword'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';
+import { StoreContext } from './context/StoreContext';
 
 const App = () => {
 
-  const [showLogin, setShowLogin] = useState(false)
+  const { showLogin, setShowLogin } = React.useContext(StoreContext);
   const [searchQuery, setSearchQuery] = useState("");
   const location = useLocation();
 
@@ -25,8 +27,8 @@ const App = () => {
 
   return (
     <>
-      {showLogin ? <LoginPopup setShowLogin={setShowLogin} /> : <></>}
-      {!isAdminRoute && <Navbar setShowLogin={setShowLogin} searchQuery={searchQuery} setSearchQuery={setSearchQuery} />}
+      {showLogin ? <LoginPopup /> : <></>}
+      {!isAdminRoute && <Navbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />}
       <div className='app'>
         <ToastContainer />
         <ScrollToTop />
@@ -38,6 +40,7 @@ const App = () => {
           <Route path='/myorders' element={<MyOrders />} />
           <Route path='/track-order/:orderId' element={<TrackOrder />} />
           <Route path='/wishlist' element={<Wishlist />} />
+          <Route path='/reset-password/:token' element={<ResetPassword />} />
           <Route path='/admin/*' element={<Admin />} />
         </Routes>
       </div>

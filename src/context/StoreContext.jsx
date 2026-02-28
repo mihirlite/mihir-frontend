@@ -6,12 +6,13 @@ export const StoreContext = createContext(null);
 const StoreContextProvider = (props) => {
 
     const [cartItems, setCartItems] = useState({});
-    const url = "https://mihir-backend-production.up.railway.app";
+    const url = import.meta.env.VITE_API_URL || "http://localhost:4000";
     const [token, setToken] = useState("");
     const [food_list, setFoodList] = useState([]);
     const [wishlistItems, setWishlistItems] = useState({});
     const [vegOnly, setVegOnly] = useState(false);
     const [nonVegOnly, setNonVegOnly] = useState(false);
+    const [showLogin, setShowLogin] = useState(false);
 
 
 
@@ -81,7 +82,9 @@ const StoreContextProvider = (props) => {
 
     const loadCartData = async (token) => {
         const response = await axios.post(url + "/api/cart/get", {}, { headers: { token } });
-        setCartItems(response.data.cartData);
+        if (response.data.success) {
+            setCartItems(response.data.cartData || {});
+        }
     }
 
     useEffect(() => {
@@ -113,7 +116,9 @@ const StoreContextProvider = (props) => {
         vegOnly,
         setVegOnly,
         nonVegOnly,
-        setNonVegOnly
+        setNonVegOnly,
+        showLogin,
+        setShowLogin
     }
 
 

@@ -26,6 +26,11 @@ const SearchBar = ({ searchQuery, setSearchQuery }) => {
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            document.getElementById('food-display')?.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    }}
                     placeholder='Search for dishes...'
                     className='w-full pl-14 pr-12 py-4 rounded-full border-2 border-gray-100 outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-50 transition-all duration-300 text-base md:text-lg shadow-sm bg-white placeholder-gray-400'
                 />

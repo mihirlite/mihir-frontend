@@ -10,13 +10,8 @@ const PlaceOrder = () => {
     const [data, setData] = useState({
         firstName: "",
         lastName: "",
-        email: "",
-        street: "",
-        city: "",
-        state: "",
-        zipcode: "",
-        country: "",
-        phone: ""
+        phone: "",
+        address: "Naraj Depot"
     })
 
     const onChangeHandler = (event) => {
@@ -77,19 +72,21 @@ const PlaceOrder = () => {
                         </div>
                         <div>
                             <h2 className='text-3xl font-black text-gray-800 tracking-tight'>Delivery Information</h2>
-                            <p className='text-gray-500 text-sm font-medium'>Where should we send your delicious meal?</p>
+                            <p className='text-gray-500 text-sm font-medium'>Please provide your basic details</p>
                         </div>
                     </div>
 
-                    <div className='space-y-4'>
-                        <div className="flex flex-col sm:flex-row gap-4">
-                            <div className='flex-1 group'>
+                    <div className='space-y-6'>
+                        <div className="flex flex-col sm:flex-row gap-6">
+                            <div className='flex-1'>
+                                <p className='text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1'>First Name</p>
                                 <input required name='firstName' onChange={onChangeHandler} value={data.firstName}
                                     className='w-full px-6 py-4.5 bg-white border border-gray-100 rounded-2xl outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-500/5 transition-all font-bold text-gray-800 shadow-sm'
                                     type="text" placeholder='First name'
                                 />
                             </div>
-                            <div className='flex-1 group'>
+                            <div className='flex-1'>
+                                <p className='text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1'>Last Name</p>
                                 <input required name='lastName' onChange={onChangeHandler} value={data.lastName}
                                     className='w-full px-6 py-4.5 bg-white border border-gray-100 rounded-2xl outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-500/5 transition-all font-bold text-gray-800 shadow-sm'
                                     type="text" placeholder='Last name'
@@ -97,42 +94,29 @@ const PlaceOrder = () => {
                             </div>
                         </div>
 
-                        <input required name='email' onChange={onChangeHandler} value={data.email}
-                            className='w-full px-6 py-4.5 bg-white border border-gray-100 rounded-2xl outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-500/5 transition-all font-bold text-gray-800 shadow-sm'
-                            type="email" placeholder='Email address'
-                        />
-
-                        <input required name='street' onChange={onChangeHandler} value={data.street}
-                            className='w-full px-6 py-4.5 bg-white border border-gray-100 rounded-2xl outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-500/5 transition-all font-bold text-gray-800 shadow-sm'
-                            type="text" placeholder='Street'
-                        />
-
-                        <div className="flex flex-col sm:flex-row gap-4">
-                            <input required name='city' onChange={onChangeHandler} value={data.city}
-                                className='flex-1 px-6 py-4.5 bg-white border border-gray-100 rounded-2xl outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-500/5 transition-all font-bold text-gray-800 shadow-sm'
-                                type="text" placeholder='City'
-                            />
-                            <input required name='state' onChange={onChangeHandler} value={data.state}
-                                className='flex-1 px-6 py-4.5 bg-white border border-gray-100 rounded-2xl outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-500/5 transition-all font-bold text-gray-800 shadow-sm'
-                                type="text" placeholder='State'
+                        <div>
+                            <p className='text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1'>Phone Number</p>
+                            <input required name='phone' onChange={onChangeHandler} value={data.phone}
+                                className='w-full px-6 py-4.5 bg-white border border-gray-100 rounded-2xl outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-500/5 transition-all font-bold text-gray-800 shadow-sm'
+                                type="text" placeholder='Phone number'
                             />
                         </div>
 
-                        <div className="flex flex-col sm:flex-row gap-4">
-                            <input required name='zipcode' onChange={onChangeHandler} value={data.zipcode}
-                                className='flex-1 px-6 py-4.5 bg-white border border-gray-100 rounded-2xl outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-500/5 transition-all font-bold text-gray-800 shadow-sm'
-                                type="text" placeholder='Zip code'
-                            />
-                            <input required name='country' onChange={onChangeHandler} value={data.country}
-                                className='flex-1 px-6 py-4.5 bg-white border border-gray-100 rounded-2xl outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-500/5 transition-all font-bold text-gray-800 shadow-sm'
-                                type="text" placeholder='Country'
-                            />
+                        <div>
+                            <p className='text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1'>Delivery Location</p>
+                            <select
+                                required
+                                name='address'
+                                onChange={onChangeHandler}
+                                value={data.address}
+                                className='w-full px-6 py-4.5 bg-white border border-gray-100 rounded-2xl outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-500/5 transition-all font-bold text-gray-800 shadow-sm appearance-none'
+                            >
+                                <option value="Naraj Depot">Naraj Depot</option>
+                                <option value="NLU">NLU</option>
+                                <option value="Sri sri university">Sri sri university</option>
+                                <option value="Ravensa college">Ravensa college</option>
+                            </select>
                         </div>
-
-                        <input required name='phone' onChange={onChangeHandler} value={data.phone}
-                            className='w-full px-6 py-4.5 bg-white border border-gray-100 rounded-2xl outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-500/5 transition-all font-bold text-gray-800 shadow-sm'
-                            type="text" placeholder='Phone number'
-                        />
                     </div>
                 </div>
 

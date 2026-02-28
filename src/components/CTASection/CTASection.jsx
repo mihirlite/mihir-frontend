@@ -14,7 +14,7 @@ const CTASection = () => {
                 {/* Content Side */}
                 <div className='lg:w-3/5 text-center lg:text-left space-y-8 animate-fadeInLeft'>
                     <div className='inline-flex items-center gap-2 bg-orange-500/10 border border-orange-500/20 px-4 py-2 rounded-full text-orange-500 text-xs font-black uppercase tracking-widest mb-4'>
-                        <MdPhoneIphone size={18} /> Experience Litefood on the go
+                        <MdPhoneIphone size={18} /> Experience Flavohub on the go
                     </div>
 
                     <h2 className='text-4xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tighter'>

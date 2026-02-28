@@ -17,11 +17,11 @@ const VegNonVegCategories = () => {
     }
 
     return (
-        <div className='flex flex-col md:flex-row gap-6 md:gap-10 my-16 md:my-20 animate-fadeIn w-[90%] md:w-[85%] lg:w-[80%] m-auto'>
+        <div className='flex flex-col md:flex-row gap-6 md:gap-10 my-10 md:my-20 animate-fadeIn w-full px-4 sm:px-6 md:w-[85%] lg:w-[80%] m-auto'>
             {/* Pure Veg Card */}
             <div
                 onClick={handleVegClick}
-                className={`relative group cursor-pointer overflow-hidden rounded-[2rem] flex-1 h-[280px] sm:h-[320px] md:h-[400px] transition-all duration-500 shadow-2xl hover:shadow-green-200/50 border-4 transform hover:-translate-y-2 ${vegOnly ? 'border-green-500 scale-[1.02] ring-4 ring-green-100' : 'border-transparent'}`}
+                className={`relative group cursor-pointer overflow-hidden rounded-[2rem] flex-1 h-[250px] xs:h-[280px] sm:h-[320px] md:h-[400px] transition-all duration-500 shadow-2xl hover:shadow-green-200/50 border-4 transform hover:-translate-y-2 ${vegOnly ? 'border-green-500 scale-[1.02] ring-4 ring-green-100' : 'border-transparent'}`}
             >
                 <img
                     src="https://images.pexels.com/photos/1640774/pexels-photo-1640774.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
@@ -67,7 +67,7 @@ const VegNonVegCategories = () => {
             {/* Non-Veg Specials Card */}
             <div
                 onClick={handleNonVegClick}
-                className={`relative group cursor-pointer overflow-hidden rounded-[2rem] flex-1 h-[280px] sm:h-[320px] md:h-[400px] transition-all duration-500 shadow-2xl hover:shadow-red-200/50 border-4 transform hover:-translate-y-2 ${nonVegOnly ? 'border-red-500 scale-[1.02] ring-4 ring-red-100' : 'border-transparent'}`}
+                className={`relative group cursor-pointer overflow-hidden rounded-[2rem] flex-1 h-[250px] xs:h-[280px] sm:h-[320px] md:h-[400px] transition-all duration-500 shadow-2xl hover:shadow-red-200/50 border-4 transform hover:-translate-y-2 ${nonVegOnly ? 'border-red-500 scale-[1.02] ring-4 ring-red-100' : 'border-transparent'}`}
             >
                 <img
                     src="https://images.pexels.com/photos/106343/pexels-photo-106343.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"

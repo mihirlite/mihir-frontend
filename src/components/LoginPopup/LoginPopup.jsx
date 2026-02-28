@@ -4,9 +4,9 @@ import axios from "axios"
 import { GoogleLogin } from '@react-oauth/google';
 import { RxCross2 } from "react-icons/rx";
 
-const LoginPopup = ({ setShowLogin }) => {
+const LoginPopup = () => {
 
-    const { url, setToken } = useContext(StoreContext)
+    const { url, setToken, setShowLogin } = useContext(StoreContext)
 
     const [currState, setCurrState] = useState("Login")
     const [data, setData] = useState({
@@ -27,8 +27,19 @@ const LoginPopup = ({ setShowLogin }) => {
         if (currState === "Login") {
             newUrl += "/api/user/login"
         }
-        else {
+        else if (currState === "Sign Up") {
             newUrl += "/api/user/register"
+        }
+        else {
+            newUrl += "/api/user/forgot-password"
+            const response = await axios.post(newUrl, { email: data.email });
+            if (response.data.success) {
+                alert(response.data.message);
+                setCurrState("Login");
+            } else {
+                alert(response.data.message);
+            }
+            return;
         }
 
         const response = await axios.post(newUrl, data);
@@ -58,7 +69,7 @@ const LoginPopup = ({ setShowLogin }) => {
                 </div>
 
                 <div className="flex flex-col gap-4">
-                    {currState === "Login" ? <></> : (
+                    {currState === "Sign Up" && (
                         <input
                             name='name'
                             onChange={onChangeHandler}
@@ -78,15 +89,27 @@ const LoginPopup = ({ setShowLogin }) => {
                         required
                         className='outline-none border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300'
                     />
-                    <input
-                        name='password'
-                        onChange={onChangeHandler}
-                        value={data.password}
-                        type="password"
-                        placeholder='Password'
-                        required
-                        className='outline-none border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300'
-                    />
+                    {currState !== "Forgot Password" && (
+                        <div className="flex flex-col gap-2">
+                            <input
+                                name='password'
+                                onChange={onChangeHandler}
+                                value={data.password}
+                                type="password"
+                                placeholder='Password'
+                                required
+                                className='outline-none border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300'
+                            />
+                            {currState === "Login" && (
+                                <p
+                                    onClick={() => setCurrState("Forgot Password")}
+                                    className='text-xs text-orange-500 font-semibold cursor-pointer text-right hover:underline'
+                                >
+                                    Forgot Password?
+                                </p>
+                            )}
+                        </div>
+                    )}
                 </div>
 
                 <div className="flex flex-col gap-4">
@@ -94,7 +117,7 @@ const LoginPopup = ({ setShowLogin }) => {
                         type='submit'
                         className='bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-lg text-base cursor-pointer transition-all duration-300 hover:shadow-lg active:scale-95'
                     >
-                        {currState === "Sign Up" ? "Create account" : "Login"}
+                        {currState === "Sign Up" ? "Create account" : currState === "Login" ? "Login" : "Send reset link"}
                     </button>
 
                     <div className="relative flex items-center justify-center">
@@ -133,7 +156,8 @@ const LoginPopup = ({ setShowLogin }) => {
 
                 {currState === "Login"
                     ? <p className='text-sm text-gray-500 text-center'>Create a new account? <span onClick={() => setCurrState("Sign Up")} className='text-orange-500 font-bold cursor-pointer hover:underline'>Click here</span></p>
-                    : <p className='text-sm text-gray-500 text-center'>Already have an account? <span onClick={() => setCurrState("Login")} className='text-orange-500 font-bold cursor-pointer hover:underline'>Login here</span></p>
+                    : currState === "Sign Up" ? <p className='text-sm text-gray-500 text-center'>Already have an account? <span onClick={() => setCurrState("Login")} className='text-orange-500 font-bold cursor-pointer hover:underline'>Login here</span></p>
+                        : <p className='text-sm text-gray-500 text-center'>Remember your password? <span onClick={() => setCurrState("Login")} className='text-orange-500 font-bold cursor-pointer hover:underline'>Back to Login</span></p>
                 }
             </form >
         </div >

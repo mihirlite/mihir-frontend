@@ -1,5 +1,7 @@
+import logo from './logo/logo.png'
+
 export const assets = {
-    logo: "https://via.placeholder.com/150/FF6347/FFFFFF?text=LiteKitchen",
+    logo,
     basket_icon: "https://via.placeholder.com/50/000000/FFFFFF?text=Cart",
     header_img: "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg",
     search_icon: "https://via.placeholder.com/50/000000/FFFFFF?text=Search",

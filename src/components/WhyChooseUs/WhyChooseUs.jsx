@@ -28,14 +28,14 @@ const WhyChooseUs = () => {
     ];
 
     return (
-        <div className='my-24 md:my-32 w-[90%] md:w-[85%] lg:w-[80%] mx-auto' id='why-choose-us'>
-            <div className='text-center mb-16 md:mb-24 animate-fadeIn'>
+        <div className='my-8 md:my-16 w-[92%] sm:w-full px-4 sm:px-6 md:w-[85%] lg:w-[80%] mx-auto' id='why-choose-us'>
+            <div className='text-center mb-8 md:mb-12 animate-fadeIn'>
                 <span className='text-orange-500 font-bold tracking-widest uppercase text-sm md:text-base mb-2 block'>Our Promise</span>
-                <h2 className='text-3xl md:text-5xl lg:text-6xl font-black text-[#323232] mb-6 tracking-tight'>
-                    Why Choose <span className='text-orange-500'>LiteFood?</span>
+                <h2 className='text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-black text-[#323232] mb-4 md:mb-6 tracking-tight'>
+                    Why Choose <span className='text-orange-500'>Flavohub?</span>
                 </h2>
-                <div className='w-24 h-1.5 bg-gradient-to-r from-orange-500 to-orange-300 mx-auto rounded-full mb-8'></div>
-                <p className='text-gray-500 text-base md:text-xl max-w-2xl mx-auto font-medium leading-relaxed'>
+                <div className='w-20 md:w-24 h-1.5 bg-gradient-to-r from-orange-500 to-orange-300 mx-auto rounded-full mb-5 md:mb-8'></div>
+                <p className='text-gray-500 text-sm sm:text-base md:text-xl max-w-2xl mx-auto font-medium leading-relaxed'>
                     We don't just deliver food, we deliver experiences. Join millions of happy customers who trust us for their daily cravings.
                 </p>
             </div>
@@ -44,16 +44,16 @@ const WhyChooseUs = () => {
                 {features.map((feature, index) => (
                     <div
                         key={index}
-                        className='group relative p-8 md:p-10 bg-white rounded-[2.5rem] shadow-xl hover:shadow-2xl hover:shadow-orange-100/50 transition-all duration-500 transform hover:-translate-y-4 border border-gray-100/50 overflow-hidden'
+                        className='group relative p-5 xs:p-6 md:p-7 bg-white rounded-[2.5rem] shadow-xl hover:shadow-2xl hover:shadow-orange-100/50 transition-all duration-500 transform hover:-translate-y-4 border border-gray-100/50 overflow-hidden'
                     >
                         {/* Decorative Background Blob */}
                         <div className={`absolute -top-10 -right-10 w-32 h-32 rounded-full opacity-10 transition-transform duration-500 group-hover:scale-150 ${index === 0 ? 'bg-orange-500' :
-                                index === 1 ? 'bg-green-500' :
-                                    index === 2 ? 'bg-blue-500' : 'bg-yellow-500'
+                            index === 1 ? 'bg-green-500' :
+                                index === 2 ? 'bg-blue-500' : 'bg-yellow-500'
                             }`}></div>
 
                         <div className={`
-                            w-20 h-20 md:w-24 md:h-24 mx-auto mb-8 rounded-full flex items-center justify-center
+                            w-16 h-16 md:w-20 md:h-20 mx-auto mb-4 rounded-full flex items-center justify-center
                             bg-gradient-to-br shadow-inner transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6
                             ${index === 0 ? 'from-orange-50 to-orange-100' :
                                 index === 1 ? 'from-green-50 to-green-100' :
@@ -65,7 +65,7 @@ const WhyChooseUs = () => {
                             </div>
                         </div>
 
-                        <h3 className='text-xl md:text-2xl font-bold text-gray-800 mb-4 text-center group-hover:text-orange-500 transition-colors duration-300'>
+                        <h3 className='text-xl md:text-2xl font-bold text-gray-800 mb-2 text-center group-hover:text-orange-500 transition-colors duration-300'>
                             {feature.title}
                         </h3>
 

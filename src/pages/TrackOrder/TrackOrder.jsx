@@ -139,8 +139,8 @@ const TrackOrder = () => {
                                     <p className='text-xs font-bold text-gray-400 uppercase tracking-wider mb-3'>Delivery Address</p>
                                     <div className='space-y-1'>
                                         <p className='font-bold text-gray-800'>{order.address.firstName} {order.address.lastName}</p>
-                                        <p className='text-sm text-gray-600'>{order.address.street}, {order.address.city}</p>
-                                        <p className='text-sm text-gray-600 font-medium'>{order.address.state}, {order.address.zipcode}</p>
+                                        <p className='text-sm text-gray-600 font-bold'>📍 {order.address.address}</p>
+                                        <p className='text-xs text-gray-400 font-medium mt-1 italic'>Standard Delivery Point</p>
                                         <p className='text-sm text-orange-500 font-bold mt-2'>{order.address.phone}</p>
                                     </div>
                                 </div>

@@ -1,6 +1,6 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import { MdAddCircleOutline, MdFormatListBulleted, MdOutlineShoppingCart } from "react-icons/md";
+import { MdAddCircleOutline, MdFormatListBulleted, MdOutlineShoppingCart, MdPeopleOutline } from "react-icons/md";
 
 const Sidebar = ({ isOpen, setIsOpen, logout }) => {
     return (
@@ -72,6 +72,21 @@ const Sidebar = ({ isOpen, setIsOpen, logout }) => {
                         >
                             <MdOutlineShoppingCart size={24} className='group-hover:scale-110 transition-transform duration-300' />
                             <span className='font-bold tracking-wide'>Orders</span>
+                            {({ isActive }) => isActive && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-white animate-pulse" />}
+                        </NavLink>
+
+                        <NavLink
+                            to='/admin/users'
+                            onClick={() => setIsOpen(false)}
+                            className={({ isActive }) => `
+                                flex items-center gap-4 py-4 px-6 rounded-2xl transition-all duration-300 group
+                                ${isActive
+                                    ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-200"
+                                    : "hover:bg-orange-50 text-gray-500 hover:text-orange-600"}
+                            `}
+                        >
+                            <MdPeopleOutline size={24} className='group-hover:scale-110 transition-transform duration-300' />
+                            <span className='font-bold tracking-wide'>Users</span>
                             {({ isActive }) => isActive && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-white animate-pulse" />}
                         </NavLink>
                     </div>

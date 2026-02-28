@@ -18,11 +18,11 @@ const PopularItems = ({ searchQuery = "" }) => {
     if (popular_list.length === 0) return null;
 
     return (
-        <div className='my-16 md:my-24 w-[90%] md:w-[85%] lg:w-[80%] m-auto animate-fadeIn' id='popular-items'>
+        <div className='my-12 md:my-24 w-full px-4 sm:px-6 md:w-[85%] lg:w-[80%] m-auto animate-fadeIn' id='popular-items'>
             <div className='flex flex-col md:flex-row justify-between items-start md:items-end mb-8 md:mb-12 gap-4 border-b pb-4 border-gray-200'>
                 <div>
-                    <h2 className='text-3xl md:text-4xl lg:text-5xl font-black text-[#323232] mb-1 tracking-tight'>Most Ordered Dishes</h2>
-                    <p className='text-gray-500 text-base md:text-lg font-medium'>Customer Favorites & Top Picks</p>
+                    <h2 className='text-2xl xs:text-3xl md:text-4xl lg:text-5xl font-black text-[#323232] mb-1 tracking-tight'>Most Ordered Dishes</h2>
+                    <p className='text-gray-500 text-sm md:text-base lg:text-lg font-medium'>Customer Favorites & Top Picks</p>
                 </div>
                 <button
                     onClick={() => document.getElementById('explore-menu')?.scrollIntoView({ behavior: 'smooth' })}

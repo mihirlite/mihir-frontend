@@ -4,6 +4,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom'
 import Add from './Add/Add'
 import List from './List/List'
 import Orders from './Orders/Orders'
+import Users from './Users/Users'
 import Login from './Login'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -12,7 +13,7 @@ import axios from 'axios';
 import '../../components/Navbar/NotificationPanel.css';
 
 const Admin = () => {
-    const url = "http://localhost:4000"
+    const url = import.meta.env.VITE_API_URL || "http://localhost:4000"
     const [notifications, setNotifications] = useState([]);
     const [showNotif, setShowNotif] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -146,6 +147,7 @@ const Admin = () => {
                             <Route path='/add' element={<Add url={url} token={token} />} />
                             <Route path='/list' element={<List url={url} token={token} />} />
                             <Route path='/orders' element={<Orders url={url} token={token} />} />
+                            <Route path='/users' element={<Users url={url} token={token} />} />
                         </Routes>
                     </div>
                 </main>

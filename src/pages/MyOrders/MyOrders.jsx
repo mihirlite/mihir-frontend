@@ -102,9 +102,14 @@ const MyOrders = () => {
                                                 </span>
                                             ))}
                                         </p>
-                                        <p className='text-xs text-gray-400 font-medium flex items-center gap-1 mt-2'>
-                                            {new Date(order.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
-                                        </p>
+                                        <div className='flex items-center gap-2 mt-3'>
+                                            <div className='px-3 py-1 bg-orange-50 text-orange-600 rounded-lg text-[10px] font-black uppercase tracking-wider border border-orange-100'>
+                                                📍 {order.address.address}
+                                            </div>
+                                            <p className='text-xs text-gray-400 font-medium'>
+                                                {new Date(order.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
 

@@ -105,9 +105,8 @@ const Orders = ({ url, token }) => {
                             <div className="lg:col-span-3">
                                 <p className='text-xs font-black text-gray-400 uppercase tracking-widest mb-3'>Delivery Location</p>
                                 <div className='text-sm text-gray-600 leading-relaxed font-medium bg-white/40 p-4 rounded-2xl border border-white/60'>
-                                    <p className='font-bold text-gray-800 mb-1'>{order.address.street}</p>
-                                    <p>{order.address.city}, {order.address.state}</p>
-                                    <p>{order.address.country}, {order.address.zipcode}</p>
+                                    <p className='font-black text-gray-900 text-lg mb-1'>{order.address.address}</p>
+                                    <p className='text-xs text-gray-400 mt-2 italic font-medium'>Standard Delivery Point</p>
                                 </div>
                             </div>
 
