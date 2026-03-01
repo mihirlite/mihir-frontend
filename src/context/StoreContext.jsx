@@ -6,7 +6,7 @@ export const StoreContext = createContext(null);
 const StoreContextProvider = (props) => {
 
     const [cartItems, setCartItems] = useState({});
-    const url = import.meta.env.VITE_API_URL || "http://localhost:4000";
+    const url = import.meta.env.VITE_API_URL || "https://mihir-backend.vercel.app";
     const [token, setToken] = useState("");
     const [food_list, setFoodList] = useState([]);
     const [wishlistItems, setWishlistItems] = useState({});

@@ -13,7 +13,7 @@ import axios from 'axios';
 import '../../components/Navbar/NotificationPanel.css';
 
 const Admin = () => {
-    const url = import.meta.env.VITE_API_URL || "http://localhost:4000"
+    const url = import.meta.env.VITE_API_URL || "https://mihir-backend.vercel.app"
     const [notifications, setNotifications] = useState([]);
     const [showNotif, setShowNotif] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
