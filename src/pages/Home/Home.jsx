@@ -19,12 +19,12 @@ const Home = ({ searchQuery, setSearchQuery }) => {
                 </div>
 
                 {/* Feedback Section */}
-                <div className='mt-4 md:mt-6 animate-fadeIn'>
+                <div className='animate-fadeIn'>
                     <FeedbackSection />
                 </div>
 
                 {/* Why Choose Us Section */}
-                <div className='mt-4 md:mt-6 mb-6 animate-fadeIn'>
+                <div className='animate-fadeIn'>
                     <WhyChooseUs />
                 </div>
 

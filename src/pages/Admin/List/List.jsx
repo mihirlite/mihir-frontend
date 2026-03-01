@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { MdDeleteOutline } from "react-icons/md";
+import { MdDeleteOutline, MdOutlineEdit } from "react-icons/md";
+import { Link } from 'react-router-dom';
 
 const List = ({ url, token }) => {
     const [list, setList] = useState([]);
@@ -17,13 +18,15 @@ const List = ({ url, token }) => {
     }
 
     const removeFood = async (foodId) => {
-        const response = await axios.post(`${url}/api/food/remove`, { id: foodId }, { headers: { token } });
-        await fetchList();
-        if (response.data.success) {
-            toast.success(response.data.message)
-        }
-        else {
-            toast.error("Error")
+        if (window.confirm("Are you sure you want to delete this item?")) {
+            const response = await axios.post(`${url}/api/food/remove`, { id: foodId }, { headers: { token } });
+            await fetchList();
+            if (response.data.success) {
+                toast.success(response.data.message)
+            }
+            else {
+                toast.error("Error")
+            }
         }
     }
 
@@ -60,7 +63,7 @@ const List = ({ url, token }) => {
                             <tr key={index} className='bg-gray-50/50 hover:bg-white transition-all group'>
                                 <td className='py-4 pl-6 rounded-l-3xl border-y border-l border-transparent hover:border-orange-100'>
                                     <div className='flex items-center gap-4'>
-                                        <img className='w-12 h-12 object-cover rounded-xl shadow-sm group-hover:scale-110 transition-transform' src={item.image.startsWith("http") ? item.image : `${url}/images/` + item.image} alt="" />
+                                        <img className='w-12 h-12 object-cover rounded-xl shadow-sm group-hover:scale-110 transition-transform' src={(Array.isArray(item.image) ? item.image[0] : item.image).startsWith("http") ? (Array.isArray(item.image) ? item.image[0] : item.image) : `${url}/images/` + (Array.isArray(item.image) ? item.image[0] : item.image)} alt="" />
                                         <p className='font-bold text-gray-700'>{item.name}</p>
                                     </div>
                                 </td>
@@ -72,14 +75,22 @@ const List = ({ url, token }) => {
                                         {item.veg ? 'Veg' : 'Non-Veg'}
                                     </span>
                                 </td>
-                                <td className='py-4 border-y border-transparent font-black text-gray-800'>${item.price}</td>
+                                <td className='py-4 border-y border-transparent font-black text-gray-800'>₹{item.price}</td>
                                 <td className='py-4 pr-6 rounded-r-3xl border-y border-r border-transparent text-right'>
-                                    <button
-                                        onClick={() => removeFood(item._id)}
-                                        className='p-2 hover:bg-red-50 text-gray-400 hover:text-red-500 rounded-xl transition-all active:scale-95'
-                                    >
-                                        <MdDeleteOutline size={22} />
-                                    </button>
+                                    <div className='flex items-center justify-end gap-2'>
+                                        <Link
+                                            to={`/admin/edit/${item._id}`}
+                                            className='p-2 hover:bg-orange-50 text-gray-400 hover:text-orange-500 rounded-xl transition-all active:scale-95'
+                                        >
+                                            <MdOutlineEdit size={22} />
+                                        </Link>
+                                        <button
+                                            onClick={() => removeFood(item._id)}
+                                            className='p-2 hover:bg-red-50 text-gray-400 hover:text-red-500 rounded-xl transition-all active:scale-95'
+                                        >
+                                            <MdDeleteOutline size={22} />
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         ))}
@@ -92,7 +103,7 @@ const List = ({ url, token }) => {
                 {list.map((item, index) => (
                     <div key={index} className='bg-gray-50/50 p-4 rounded-3xl border border-gray-100 flex items-center justify-between gap-4'>
                         <div className='flex items-center gap-4'>
-                            <img className='w-14 h-14 object-cover rounded-2xl' src={item.image.startsWith("http") ? item.image : `${url}/images/` + item.image} alt="" />
+                            <img className='w-14 h-14 object-cover rounded-2xl' src={(Array.isArray(item.image) ? item.image[0] : item.image).startsWith("http") ? (Array.isArray(item.image) ? item.image[0] : item.image) : `${url}/images/` + (Array.isArray(item.image) ? item.image[0] : item.image)} alt="" />
                             <div>
                                 <p className='font-bold text-gray-800 mb-1'>{item.name}</p>
                                 <div className='flex gap-2 items-center'>
@@ -101,15 +112,23 @@ const List = ({ url, token }) => {
                                         {item.veg ? 'Veg' : 'Non-Veg'}
                                     </span>
                                 </div>
-                                <p className='text-sm font-black text-gray-900 mt-1'>${item.price}</p>
+                                <p className='text-sm font-black text-gray-900 mt-1'>₹{item.price}</p>
                             </div>
                         </div>
-                        <button
-                            onClick={() => removeFood(item._id)}
-                            className='p-3 bg-white text-red-500 rounded-2xl shadow-sm border border-red-50 active:scale-90 transition-all'
-                        >
-                            <MdDeleteOutline size={20} />
-                        </button>
+                        <div className='flex flex-col gap-2'>
+                            <Link
+                                to={`/admin/edit/${item._id}`}
+                                className='p-3 bg-white text-orange-500 rounded-2xl shadow-sm border border-orange-50 active:scale-90 transition-all flex items-center justify-center'
+                            >
+                                <MdOutlineEdit size={20} />
+                            </Link>
+                            <button
+                                onClick={() => removeFood(item._id)}
+                                className='p-3 bg-white text-red-500 rounded-2xl shadow-sm border border-red-50 active:scale-90 transition-all'
+                            >
+                                <MdDeleteOutline size={20} />
+                            </button>
+                        </div>
                     </div>
                 ))}
             </div>

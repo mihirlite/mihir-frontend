@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { StoreContext } from '../../context/StoreContext'
 import axios from "axios"
 import { GoogleLogin } from '@react-oauth/google';
@@ -151,7 +152,7 @@ const LoginPopup = () => {
 
                 <div className="flex items-start gap-2 text-sm text-gray-500">
                     <input type="checkbox" required className='mt-1 accent-orange-500' />
-                    <p>By continuing, I agree to the terms of use & privacy policy.</p>
+                    <p>By continuing, I agree to the <Link to='/terms' onClick={() => setShowLogin(false)} className='text-orange-500 font-bold hover:underline'>terms of use & privacy policy</Link>.</p>
                 </div>
 
                 {currState === "Login"

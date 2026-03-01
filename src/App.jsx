@@ -12,6 +12,7 @@ import TrackOrder from './pages/TrackOrder/TrackOrder'
 import Admin from './pages/Admin/Admin'
 import Wishlist from './pages/Wishlist/Wishlist'
 import ResetPassword from './pages/ResetPassword/ResetPassword'
+import Terms from './pages/Terms/Terms'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';
@@ -41,6 +42,7 @@ const App = () => {
           <Route path='/track-order/:orderId' element={<TrackOrder />} />
           <Route path='/wishlist' element={<Wishlist />} />
           <Route path='/reset-password/:token' element={<ResetPassword />} />
+          <Route path='/terms' element={<Terms />} />
           <Route path='/admin/*' element={<Admin />} />
         </Routes>
       </div>

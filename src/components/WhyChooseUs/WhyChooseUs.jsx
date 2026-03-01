@@ -28,7 +28,7 @@ const WhyChooseUs = () => {
     ];
 
     return (
-        <div className='my-8 md:my-16 w-[92%] sm:w-full px-4 sm:px-6 md:w-[85%] lg:w-[80%] mx-auto' id='why-choose-us'>
+        <div className='mt-4 md:mt-6 mb-0 w-[92%] sm:w-full px-4 sm:px-6 md:w-[85%] lg:w-[80%] mx-auto' id='why-choose-us'>
             <div className='text-center mb-8 md:mb-12 animate-fadeIn'>
                 <span className='text-orange-500 font-bold tracking-widest uppercase text-sm md:text-base mb-2 block'>Our Promise</span>
                 <h2 className='text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-black text-[#323232] mb-4 md:mb-6 tracking-tight'>

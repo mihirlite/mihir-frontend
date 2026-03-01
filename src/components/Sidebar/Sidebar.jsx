@@ -1,6 +1,7 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import { MdAddCircleOutline, MdFormatListBulleted, MdOutlineShoppingCart, MdPeopleOutline } from "react-icons/md";
+import { MdAddCircleOutline, MdFormatListBulleted, MdOutlineShoppingCart, MdPeopleOutline, MdConfirmationNumber, MdLocalShipping, MdAccountBalanceWallet } from "react-icons/md";
+import logo from '../../assets/logo/logo.png'
 
 const Sidebar = ({ isOpen, setIsOpen, logout }) => {
     return (
@@ -21,7 +22,7 @@ const Sidebar = ({ isOpen, setIsOpen, logout }) => {
             `}>
                 <div className="flex flex-col h-full p-6">
                     <div className="lg:hidden flex items-center justify-between mb-8">
-                        <h2 className="text-xl font-black text-orange-500">Admin Panel</h2>
+                        <img src={logo} alt="Logo" className='w-24 object-contain' />
                         <button onClick={() => setIsOpen(false)} className="p-2 text-gray-400 hover:text-orange-500">
                             ✕
                         </button>
@@ -87,6 +88,51 @@ const Sidebar = ({ isOpen, setIsOpen, logout }) => {
                         >
                             <MdPeopleOutline size={24} className='group-hover:scale-110 transition-transform duration-300' />
                             <span className='font-bold tracking-wide'>Users</span>
+                            {({ isActive }) => isActive && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-white animate-pulse" />}
+                        </NavLink>
+
+                        <NavLink
+                            to='/admin/coupons'
+                            onClick={() => setIsOpen(false)}
+                            className={({ isActive }) => `
+                                flex items-center gap-4 py-4 px-6 rounded-2xl transition-all duration-300 group
+                                ${isActive
+                                    ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-200"
+                                    : "hover:bg-orange-50 text-gray-500 hover:text-orange-600"}
+                            `}
+                        >
+                            <MdConfirmationNumber size={24} className='group-hover:scale-110 transition-transform duration-300' />
+                            <span className='font-bold tracking-wide'>Coupon Code</span>
+                            {({ isActive }) => isActive && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-white animate-pulse" />}
+                        </NavLink>
+
+                        <NavLink
+                            to='/admin/delivery'
+                            onClick={() => setIsOpen(false)}
+                            className={({ isActive }) => `
+                                flex items-center gap-4 py-4 px-6 rounded-2xl transition-all duration-300 group
+                                ${isActive
+                                    ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-200"
+                                    : "hover:bg-orange-50 text-gray-500 hover:text-orange-600"}
+                            `}
+                        >
+                            <MdLocalShipping size={24} className='group-hover:scale-110 transition-transform duration-300' />
+                            <span className='font-bold tracking-wide'>Delivery Fee</span>
+                            {({ isActive }) => isActive && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-white animate-pulse" />}
+                        </NavLink>
+
+                        <NavLink
+                            to='/admin/gst-charges'
+                            onClick={() => setIsOpen(false)}
+                            className={({ isActive }) => `
+                                flex items-center gap-4 py-4 px-6 rounded-2xl transition-all duration-300 group
+                                ${isActive
+                                    ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-200"
+                                    : "hover:bg-orange-50 text-gray-500 hover:text-orange-600"}
+                            `}
+                        >
+                            <MdAccountBalanceWallet size={24} className='group-hover:scale-110 transition-transform duration-300' />
+                            <span className='font-bold tracking-wide'>GST & Charges</span>
                             {({ isActive }) => isActive && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-white animate-pulse" />}
                         </NavLink>
                     </div>

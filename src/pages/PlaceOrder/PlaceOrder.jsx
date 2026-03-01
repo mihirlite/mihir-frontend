@@ -6,7 +6,7 @@ import { MdPayment, MdLocationOn, MdShoppingBag, MdArrowForward } from 'react-ic
 
 const PlaceOrder = () => {
 
-    const { getTotalCartAmount, token, food_list, cartItems, url } = useContext(StoreContext)
+    const { getTotalCartAmount, token, food_list, cartItems, url, getDiscountAmount, getDeliveryFee, getGSTAmount, getChargesAmount } = useContext(StoreContext)
     const [data, setData] = useState({
         firstName: "",
         lastName: "",
@@ -16,7 +16,10 @@ const PlaceOrder = () => {
 
     const onChangeHandler = (event) => {
         const name = event.target.name;
-        const value = event.target.value;
+        let value = event.target.value;
+        if (name === 'phone') {
+            value = value.replace(/\D/g, '');
+        }
         setData(data => ({ ...data, [name]: value }))
     }
 
@@ -33,7 +36,7 @@ const PlaceOrder = () => {
         let orderData = {
             address: data,
             items: orderItems,
-            amount: getTotalCartAmount() + 2,
+            amount: getTotalCartAmount() + getDeliveryFee(getTotalCartAmount()) + getGSTAmount(getTotalCartAmount()) + getChargesAmount(getTotalCartAmount()) - getDiscountAmount(),
         }
         try {
             let response = await axios.post(url + "/api/order/place", orderData, { headers: { token } });
@@ -79,14 +82,14 @@ const PlaceOrder = () => {
                     <div className='space-y-6'>
                         <div className="flex flex-col sm:flex-row gap-6">
                             <div className='flex-1'>
-                                <p className='text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1'>First Name</p>
+                                <p className='text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1'>First Name <span className='text-red-500'>*</span></p>
                                 <input required name='firstName' onChange={onChangeHandler} value={data.firstName}
                                     className='w-full px-6 py-4.5 bg-white border border-gray-100 rounded-2xl outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-500/5 transition-all font-bold text-gray-800 shadow-sm'
                                     type="text" placeholder='First name'
                                 />
                             </div>
                             <div className='flex-1'>
-                                <p className='text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1'>Last Name</p>
+                                <p className='text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1'>Last Name <span className='text-red-500'>*</span></p>
                                 <input required name='lastName' onChange={onChangeHandler} value={data.lastName}
                                     className='w-full px-6 py-4.5 bg-white border border-gray-100 rounded-2xl outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-500/5 transition-all font-bold text-gray-800 shadow-sm'
                                     type="text" placeholder='Last name'
@@ -95,15 +98,15 @@ const PlaceOrder = () => {
                         </div>
 
                         <div>
-                            <p className='text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1'>Phone Number</p>
+                            <p className='text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1'>Phone Number <span className='text-red-500'>*</span></p>
                             <input required name='phone' onChange={onChangeHandler} value={data.phone}
                                 className='w-full px-6 py-4.5 bg-white border border-gray-100 rounded-2xl outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-500/5 transition-all font-bold text-gray-800 shadow-sm'
-                                type="text" placeholder='Phone number'
+                                type="tel" placeholder='Phone number'
                             />
                         </div>
 
                         <div>
-                            <p className='text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1'>Delivery Location</p>
+                            <p className='text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1'>Delivery Location <span className='text-red-500'>*</span></p>
                             <select
                                 required
                                 name='address'
@@ -135,19 +138,29 @@ const PlaceOrder = () => {
                         <div className='space-y-4 px-1'>
                             <div className="flex justify-between items-center text-gray-500 font-bold">
                                 <p className='text-xs uppercase tracking-widest'>Subtotal</p>
-                                <p className='text-gray-800 text-lg'>${getTotalCartAmount()}.00</p>
+                                <p className='text-gray-800 text-lg'>₹{getTotalCartAmount()}.00</p>
                             </div>
                             <div className="flex justify-between items-center text-gray-500 font-bold">
                                 <p className='text-xs uppercase tracking-widest'>Delivery Fee</p>
-                                <p className='text-gray-800 text-lg'>+ $2.00</p>
+                                <p className='text-gray-800 text-lg'>+ ₹{getDeliveryFee(getTotalCartAmount()).toFixed(2)}</p>
                             </div>
+                            <div className="flex justify-between items-center text-gray-500 font-bold">
+                                <p className='text-xs uppercase tracking-widest'>GST and Charges</p>
+                                <p className='text-gray-800 text-lg'>+ ₹{(getGSTAmount(getTotalCartAmount()) + getChargesAmount(getTotalCartAmount())).toFixed(2)}</p>
+                            </div>
+                            {getDiscountAmount() > 0 && (
+                                <div className="flex justify-between items-center text-green-600 font-bold">
+                                    <p className='text-xs uppercase tracking-widest'>Discount</p>
+                                    <p className='text-green-600 text-lg'>- ₹{getDiscountAmount().toFixed(2)}</p>
+                                </div>
+                            )}
 
                             <div className='h-[1px] bg-gray-50 w-full my-6'></div>
 
                             <div className="flex justify-between items-center">
                                 <div>
                                     <p className='text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1'>Total Amount</p>
-                                    <p className='text-3xl font-black text-orange-600 tracking-tighter'>${getTotalCartAmount() + 2}.00</p>
+                                    <p className='text-3xl font-black text-orange-600 tracking-tighter'>₹{(getTotalCartAmount() + getDeliveryFee(getTotalCartAmount()) + getGSTAmount(getTotalCartAmount()) + getChargesAmount(getTotalCartAmount()) - getDiscountAmount()).toFixed(2)}</p>
                                 </div>
                                 <div className='bg-orange-50 text-orange-600 p-3 rounded-2xl border border-orange-100'>
                                     <MdPayment size={24} />

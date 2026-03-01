@@ -65,8 +65,8 @@ const TrackOrder = () => {
                             <h2 className='text-2xl font-black'>#{order._id.slice(-8).toUpperCase()}</h2>
                         </div>
                         <div className='bg-white/20 backdrop-blur-md px-6 py-3 rounded-2xl'>
-                            <p className='text-xs font-bold text-orange-50 uppercase tracking-wider mb-1'>Expected Total</p>
-                            <p className='text-2xl font-black'>${order.amount}.00</p>
+                            <p className='text-xs font-bold text-orange-5  0 uppercase tracking-wider mb-1'>Expected Total</p>
+                            <p className='text-2xl font-black'>₹{order.amount}.00</p>
                         </div>
                     </div>
                 </div>
@@ -118,10 +118,10 @@ const TrackOrder = () => {
                                             </div>
                                             <div>
                                                 <p className='font-bold text-gray-800'>{item.name}</p>
-                                                <p className='text-xs text-gray-500'>${item.price} each</p>
+                                                <p className='text-xs text-gray-500'>₹{item.price} each</p>
                                             </div>
                                         </div>
-                                        <p className='font-bold text-gray-700'>${item.price * item.quantity}.00</p>
+                                        <p className='font-bold text-gray-700'>₹{item.price * item.quantity}.00</p>
                                     </div>
                                 ))}
                             </div>

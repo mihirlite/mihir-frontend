@@ -1,20 +1,29 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { StoreContext } from '../../context/StoreContext'
 import { useNavigate } from 'react-router-dom';
-import { MdAdd, MdRemove, MdClose, MdCheckCircle, MdArrowForward } from 'react-icons/md';
+import { MdAdd, MdRemove, MdClose, MdCheckCircle, MdArrowForward, MdDeleteOutline, MdLocalOffer } from 'react-icons/md';
 
 const Cart = () => {
 
-    const { cartItems, food_list, removeFromCart, addToCart, getTotalCartAmount, url } = useContext(StoreContext);
+    const {
+        cartItems, food_list, removeFromCart, addToCart, removeFromCartAll,
+        getTotalCartAmount, url, applyCoupon, getDiscountAmount,
+        appliedCoupon, setAppliedCoupon, getDeliveryFee, deliverySettings,
+        getGSTAmount, getChargesAmount
+    } = useContext(StoreContext);
+
+    const [couponInput, setCouponInput] = useState("");
     const navigate = useNavigate();
 
     const hasItems = Object.values(cartItems).some(count => count > 0);
     const totalItems = Object.values(cartItems).reduce((a, b) => a + b, 0);
 
     const subtotal = getTotalCartAmount();
-    const delivery = (subtotal > 0 && subtotal < 499) ? 30 : 0;
-    const gst = subtotal > 0 ? 18 : 0;
-    const total = subtotal + delivery + gst;
+    const discount = getDiscountAmount();
+    const delivery = getDeliveryFee(subtotal);
+    const gst = getGSTAmount(subtotal);
+    const serviceCharges = getChargesAmount(subtotal);
+    const total = subtotal + delivery + gst + serviceCharges - discount;
 
     return (
         <div className='max-w-[800px] mx-auto pt-24 pb-12 px-4 md:px-6 animate-fadeIn'>
@@ -57,7 +66,7 @@ const Cart = () => {
                                             {/* Item Image */}
                                             <div className='relative shrink-0'>
                                                 <div className='w-24 h-24 md:w-28 md:h-28 rounded-[24px] overflow-hidden border border-gray-100'>
-                                                    <img className='w-full h-full object-cover' src={url + "/images/" + item.image} alt={item.name} />
+                                                    <img className='w-full h-full object-cover' src={url + "/images/" + (Array.isArray(item.image) ? item.image[0] : item.image)} alt={item.name} />
                                                 </div>
                                                 {item.veg === false && !item.name.toLowerCase().includes("thali") && (
                                                     <div className='absolute bottom-0 left-0 w-full bg-green-600/90 text-white text-[10px] font-black text-center py-1 rounded-b-[24px] backdrop-blur-sm'>
@@ -76,8 +85,8 @@ const Cart = () => {
                                             <div className='flex-1 flex flex-col pt-1'>
                                                 <div className='flex justify-between items-start'>
                                                     <h3 className='font-black text-gray-800 text-lg md:text-xl leading-tight'>{item.name}</h3>
-                                                    <button onClick={() => removeFromCart(item._id)} className='text-gray-300 hover:text-red-500 transition-colors'>
-                                                        <MdClose size={24} />
+                                                    <button onClick={() => removeFromCartAll(item._id)} className='text-red-300 hover:text-red-500 transition-colors'>
+                                                        <MdDeleteOutline size={26} />
                                                     </button>
                                                 </div>
                                                 <p className='text-lg font-black text-gray-800 mt-1'>₹{item.price}</p>
@@ -99,13 +108,6 @@ const Cart = () => {
                                                             <MdAdd size={20} />
                                                         </button>
                                                     </div>
-
-                                                    <button
-                                                        onClick={() => addToCart(item._id)}
-                                                        className='bg-[#ff7e00] text-white px-8 py-3 rounded-xl font-black text-base hover:bg-orange-600 transition-colors shadow-lg shadow-orange-100 active:scale-95'
-                                                    >
-                                                        Add
-                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -119,37 +121,70 @@ const Cart = () => {
                         <div className='space-y-4 pt-4'>
                             <div className='flex justify-between items-center text-gray-600 font-bold'>
                                 <p className='text-lg'>Subtotal</p>
-                                <p className='text-gray-800 text-xl font-black'>₹{subtotal}</p>
+                                <p className='text-gray-800 text-xl font-black'>₹{subtotal.toFixed(2)}</p>
                             </div>
                             <div className='flex justify-between items-center text-gray-400 font-bold'>
                                 <p className='text-lg'>Delivery</p>
-                                <p className='text-gray-800 text-lg font-black'>₹{delivery}</p>
+                                <p className='text-gray-800 text-lg font-black'>₹{delivery.toFixed(2)}</p>
                             </div>
                             <div className='flex justify-between items-center text-gray-400 font-bold'>
-                                <p className='text-lg'>GST</p>
-                                <p className='text-gray-800 text-lg font-black'>₹{gst}</p>
+                                <p className='text-lg'>GST and Charges</p>
+                                <p className='text-gray-800 text-lg font-black'>₹{(gst + serviceCharges).toFixed(2)}</p>
                             </div>
+
+                            {discount > 0 && (
+                                <div className='flex justify-between items-center text-green-600 font-bold animate-fadeIn'>
+                                    <p className='text-lg flex items-center gap-2'>
+                                        <MdLocalOffer /> Discount ({appliedCoupon.name})
+                                    </p>
+                                    <p className='text-green-600 text-lg font-black'>-₹{discount.toFixed(2)}</p>
+                                </div>
+                            )}
 
                             <div className='pt-6 border-t border-gray-100 flex justify-between items-center'>
                                 <h3 className='text-2xl font-black text-gray-800 tracking-tight'>Total</h3>
-                                <p className='text-3xl font-black text-gray-800'>₹{total}</p>
+                                <p className='text-3xl font-black text-gray-800'>₹{total.toFixed(2)}</p>
                             </div>
                         </div>
 
                         {/* Coupon Box */}
-                        <div className='mt-8 flex gap-3'>
-                            <input
-                                type="text"
-                                placeholder="Apply Coupon"
-                                className='flex-1 bg-white border-2 border-gray-100 rounded-2xl px-6 py-4 outline-none focus:border-orange-500 transition-all font-bold placeholder-gray-300'
-                            />
+                        <div className='mt-8'>
+                            <div className='flex flex-col sm:flex-row gap-3'>
+                                <input
+                                    type="text"
+                                    placeholder={appliedCoupon ? appliedCoupon.name : "Apply Coupon"}
+                                    disabled={!!appliedCoupon}
+                                    value={couponInput}
+                                    onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
+                                    className={`w-full sm:flex-1 bg-white border-2 rounded-2xl px-6 py-4 outline-none transition-all font-black placeholder-gray-300 ${appliedCoupon ? 'border-green-100 bg-green-50/30 text-green-700' : 'border-gray-100 focus:border-orange-500'}`}
+                                />
+                                {appliedCoupon ? (
+                                    <button
+                                        onClick={() => {
+                                            setAppliedCoupon(null);
+                                            setCouponInput("");
+                                        }}
+                                        className='w-full sm:w-auto py-4 px-8 bg-gray-100 text-gray-400 rounded-2xl font-black hover:bg-red-50 hover:text-red-500 transition-all active:scale-95'
+                                    >
+                                        Remove
+                                    </button>
+                                ) : (
+                                    <button
+                                        onClick={() => applyCoupon(couponInput)}
+                                        disabled={!couponInput}
+                                        className='w-full sm:w-auto py-4 px-10 bg-[#323232] text-white rounded-2xl font-black hover:bg-[#ff7e00] transition-all shadow-lg active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed'
+                                    >
+                                        Apply
+                                    </button>
+                                )}
+                            </div>
                         </div>
 
                         {/* Free Delivery Promo */}
                         <div className='flex items-center gap-3 py-2'>
                             <MdCheckCircle className='text-green-500 text-2xl' />
                             <p className='text-green-700 font-black text-sm md:text-base'>
-                                {subtotal >= 499 ? 'You unlocked Free Delivery!' : 'Free delivery above ₹499'}
+                                {deliverySettings.isFreeDelivery ? 'Free Delivery!' : delivery === 0 ? 'Free Delivery unlocked!' : `Delivery Charge: ₹${delivery}`}
                             </p>
                         </div>
 

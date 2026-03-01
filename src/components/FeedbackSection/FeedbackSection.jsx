@@ -1,5 +1,9 @@
 import React from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Pagination } from 'swiper/modules';
 import { FaStar, FaQuoteLeft } from 'react-icons/fa';
+import 'swiper/css';
+import 'swiper/css/pagination';
 
 const FeedbackSection = () => {
     const feedbacks = [
@@ -24,7 +28,7 @@ const FeedbackSection = () => {
     ];
 
     return (
-        <section className='w-[92%] sm:w-[90%] md:w-[85%] lg:w-[80%] m-auto py-8 md:py-16' id='feedback'>
+        <section className='w-[92%] sm:w-[90%] md:w-[85%] lg:w-[80%] m-auto py-6 md:py-10' id='feedback'>
             <div className='flex flex-col items-center mb-6 md:mb-12'>
                 <h2 className='text-2xl sm:text-3xl md:text-5xl font-black text-[#323232] text-center mb-4'>
                     What Our <span className='text-[#ff7e00]'>Customers</span> Say
@@ -32,38 +36,57 @@ const FeedbackSection = () => {
                 <div className='w-20 md:w-24 h-1.5 bg-[#ff7e00] rounded-full'></div>
             </div>
 
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8'>
-                {feedbacks.map((item, index) => (
-                    <div
-                        key={index}
-                        className='relative bg-white/40 backdrop-blur-md border border-gray-100 rounded-[32px] p-6 md:p-8 shadow-[0_15px_40px_rgba(0,0,0,0.03)] hover:shadow-[0_30px_60px_rgba(255,126,0,0.1)] transition-all duration-500 group hover:-translate-y-3 flex flex-col'
-                    >
-                        {/* Quote Icon Icon */}
-                        <div className='absolute -top-6 left-10 w-12 h-12 bg-[#ff7e00] rounded-2xl flex items-center justify-center text-white shadow-lg shadow-orange-200 group-hover:rotate-12 transition-transform duration-300'>
-                            <FaQuoteLeft size={20} />
-                        </div>
-
-                        <div className='flex flex-col gap-4'>
-                            <p className='text-gray-600 italic leading-relaxed text-sm sm:text-base md:text-lg'>
-                                "{item.comment}"
-                            </p>
-
-                            <div className='flex items-center gap-4 mt-4'>
-                                <div className='w-14 h-14 rounded-2xl overflow-hidden border-2 border-orange-100 bg-orange-50'>
-                                    <img src={item.image} alt={item.name} className='w-full h-full object-cover' />
+            <div className='feedback-carousel-container relative'>
+                <Swiper
+                    modules={[Autoplay, Pagination]}
+                    spaceBetween={20}
+                    slidesPerView={1}
+                    autoplay={{
+                        delay: 3000,
+                        disableOnInteraction: false,
+                    }}
+                    pagination={{ clickable: true }}
+                    breakpoints={{
+                        768: {
+                            slidesPerView: 2,
+                            spaceBetween: 30
+                        },
+                        1024: { slidesPerView: 3, spaceBetween: 40 }
+                    }}
+                    className="feedback-swiper !pt-12 !pb-14"
+                >
+                    {feedbacks.map((item, index) => (
+                        <SwiperSlide key={index} className="!h-auto flex">
+                            <div
+                                className='relative bg-white/40 backdrop-blur-md border border-gray-100 rounded-[32px] p-6 md:p-8 shadow-[0_15px_40px_rgba(0,0,0,0.03)] hover:shadow-[0_30px_60px_rgba(255,126,0,0.1)] transition-all duration-500 group flex flex-col w-full mx-1 my-2'
+                            >
+                                <div className='absolute -top-5 left-8 w-11 h-11 bg-[#ff7e00] rounded-2xl flex items-center justify-center text-white shadow-lg shadow-orange-200 group-hover:rotate-12 transition-transform duration-300 z-10'>
+                                    <FaQuoteLeft size={18} />
                                 </div>
-                                <div>
-                                    <h4 className='font-black text-[#323232] text-lg'>{item.name}</h4>
-                                    <div className='flex text-orange-400 gap-0.5 mt-1'>
-                                        {[...Array(5)].map((_, i) => (
-                                            <FaStar key={i} size={14} className={i < item.rating ? "fill-current" : "text-gray-200"} />
-                                        ))}
+
+                                <div className='flex flex-col gap-4 flex-1 mt-2'>
+                                    <p className='text-gray-600 italic leading-relaxed text-sm sm:text-base md:text-lg'>
+                                        "{item.comment}"
+                                    </p>
+
+                                    <div className='flex items-center gap-4 mt-auto pt-4'>
+                                        <div className='w-12 h-12 rounded-2xl overflow-hidden border-2 border-orange-100 bg-orange-50 shrink-0'>
+                                            <img src={item.image} alt={item.name} className='w-full h-full object-cover' />
+                                        </div>
+                                        <div>
+                                            <h4 className='font-black text-[#323232] text-base md:text-lg leading-tight'>{item.name}</h4>
+                                            <div className='flex text-orange-400 gap-0.5 mt-1'>
+                                                {[...Array(5)].map((_, i) => (
+                                                    <FaStar key={i} size={12} className={i < item.rating ? "fill-current" : "text-gray-200"} />
+                                                ))}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                ))}
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
             </div>
 
             {/* CTA for more feedback */}

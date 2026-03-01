@@ -1,11 +1,18 @@
-import React, { useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { StoreContext } from '../../context/StoreContext'
+import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { StoreContext } from '../../context/StoreContext';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Pagination } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/pagination';
 
 const FoodItem = ({ id, name, price, description, image, veg, inStock = true }) => {
 
     const { cartItems, addToCart, removeFromCart, url, wishlistItems, addToWishlist, token, setShowLogin } = useContext(StoreContext);
     const navigate = useNavigate();
+
+    // Standardize images to an array
+    const imagesArray = Array.isArray(image) ? image : [image];
 
     const handleOrderNow = () => {
         if (!inStock) return;
@@ -33,13 +40,32 @@ const FoodItem = ({ id, name, price, description, image, veg, inStock = true }) 
                 {inStock ? '● In Stock' : '● Out of Stock'}
             </div>
 
-            {/* Food Image */}
-            <div className="relative overflow-hidden h-[180px] xs:h-[220px] md:h-[240px] w-full bg-gray-100">
-                <img
-                    className={`w-full h-full object-cover transition-transform duration-700 ${inStock ? 'group-hover:scale-110' : 'grayscale-[0.5]'}`}
-                    src={image.startsWith("http") ? image : url + "/images/" + image}
-                    alt={name}
-                />
+            {/* Food Image Carousel */}
+            <div className="relative overflow-hidden h-[180px] xs:h-[220px] md:h-[240px] w-full bg-gray-100 product-swiper">
+                {imagesArray.length > 1 ? (
+                    <Swiper
+                        modules={[Autoplay, Pagination]}
+                        pagination={{ clickable: true }}
+                        autoplay={{ delay: 3000, disableOnInteraction: false }}
+                        className="h-full w-full"
+                    >
+                        {imagesArray.map((img, index) => (
+                            <SwiperSlide key={index}>
+                                <img
+                                    className={`w-full h-full object-cover transition-transform duration-700 ${inStock ? 'group-hover:scale-110' : 'grayscale-[0.5]'}`}
+                                    src={img.startsWith("http") ? img : url + "/images/" + img}
+                                    alt={`${name} - ${index + 1}`}
+                                />
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+                ) : (
+                    <img
+                        className={`w-full h-full object-cover transition-transform duration-700 ${inStock ? 'group-hover:scale-110' : 'grayscale-[0.5]'}`}
+                        src={imagesArray[0]?.startsWith("http") ? imagesArray[0] : url + "/images/" + imagesArray[0]}
+                        alt={name}
+                    />
+                )}
                 {!inStock && (
                     <div className='absolute inset-0 bg-black/40 flex items-center justify-center backdrop-blur-[2px] z-10'>
                         <span className="bg-white/90 text-red-600 px-4 py-2 rounded-lg font-extrabold text-sm uppercase tracking-widest shadow-lg rotate-[-12deg] border-2 border-red-500">
@@ -47,7 +73,7 @@ const FoodItem = ({ id, name, price, description, image, veg, inStock = true }) 
                         </span>
                     </div>
                 )}
-                <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
             </div>
 
             {/* Card Body */}

@@ -1,10 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { MdCloudUpload } from "react-icons/md";
+import { useParams, useNavigate } from 'react-router-dom';
 
-const Add = ({ url, token }) => {
+const Edit = ({ url, token }) => {
+    const { id } = useParams();
+    const navigate = useNavigate();
     const [images, setImages] = useState([])
+    const [existingImages, setExistingImages] = useState([])
     const [data, setData] = useState({
         name: "",
         description: "",
@@ -12,6 +16,32 @@ const Add = ({ url, token }) => {
         category: "Salad",
         veg: "true"
     })
+
+    const fetchItemDetails = async () => {
+        try {
+            const response = await axios.get(`${url}/api/food/get-item?id=${id}`);
+            if (response.data.success) {
+                const item = response.data.data;
+                setData({
+                    name: item.name,
+                    description: item.description,
+                    price: item.price,
+                    category: item.category,
+                    veg: String(item.veg)
+                })
+                setExistingImages(Array.isArray(item.image) ? item.image : [item.image])
+            } else {
+                toast.error("Error fetching item details")
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error("Error fetching item details")
+        }
+    }
+
+    useEffect(() => {
+        fetchItemDetails();
+    }, [id])
 
     const onChangeHandler = (event) => {
         const name = event.target.name;
@@ -30,49 +60,40 @@ const Add = ({ url, token }) => {
 
     const onSubmitHandler = async (event) => {
         event.preventDefault();
-        if (images.length === 0) {
-            toast.error("Please upload at least one image");
-            return;
-        }
-
         const formData = new FormData();
+        formData.append("id", id)
         formData.append("name", data.name)
         formData.append("description", data.description)
         formData.append("price", Number(data.price))
         formData.append("category", data.category)
         formData.append("veg", data.veg)
 
-        images.forEach((img) => {
-            formData.append("image", img);
-        });
+        if (images.length > 0) {
+            images.forEach((img) => {
+                formData.append("image", img);
+            });
+        }
 
         try {
-            const response = await axios.post(`${url}/api/food/add`, formData, { headers: { token } });
+            const response = await axios.post(`${url}/api/food/update`, formData, { headers: { token } });
             if (response.data.success) {
-                setData({
-                    name: "",
-                    description: "",
-                    price: "",
-                    category: "Salad",
-                    veg: "true"
-                })
-                setImages([])
                 toast.success(response.data.message)
+                navigate('/admin/list')
             }
             else {
                 toast.error(response.data.message)
             }
         } catch (error) {
             console.error(error);
-            toast.error("Error adding food")
+            toast.error("Error updating food")
         }
     }
 
     return (
         <div className='animate-fadeIn'>
             <div className='mb-8'>
-                <h3 className='text-2xl font-black text-gray-800 mb-1'>Add New Product</h3>
-                <p className='text-sm text-gray-500'>Create a new food item with up to 4 images</p>
+                <h3 className='text-2xl font-black text-gray-800 mb-1'>Edit Product</h3>
+                <p className='text-sm text-gray-500'>Update the details of your food item</p>
             </div>
 
             <form className='grid grid-cols-1 lg:grid-cols-12 gap-10' onSubmit={onSubmitHandler}>
@@ -82,7 +103,7 @@ const Add = ({ url, token }) => {
                     <label htmlFor="image" className='group cursor-pointer'>
                         <div className={`
                             w-full rounded-3xl border-2 border-dashed flex flex-col items-center justify-center gap-4 transition-all duration-300 min-h-[220px] p-4
-                            ${images.length > 0 ? 'border-orange-500 bg-orange-50' : 'border-gray-200 bg-gray-50 hover:border-orange-400 hover:bg-orange-50/30'}
+                            ${(images.length > 0 || existingImages.length > 0) ? 'border-orange-500 bg-orange-50' : 'border-gray-200 bg-gray-50 hover:border-orange-400 hover:bg-orange-50/30'}
                         `}>
                             {images.length > 0 ? (
                                 <div className='grid grid-cols-2 gap-3 w-full'>
@@ -97,10 +118,18 @@ const Add = ({ url, token }) => {
                                         </div>
                                     )}
                                 </div>
+                            ) : existingImages.length > 0 ? (
+                                <div className='grid grid-cols-2 gap-3 w-full'>
+                                    {existingImages.map((img, index) => (
+                                        <div key={index} className='aspect-square rounded-xl overflow-hidden shadow-sm'>
+                                            <img src={img.startsWith("http") ? img : `${url}/images/` + img} className='w-full h-full object-cover' alt="" />
+                                        </div>
+                                    ))}
+                                </div>
                             ) : (
                                 <>
                                     <MdCloudUpload className='text-4xl text-gray-300 group-hover:text-orange-400' />
-                                    <p className='text-[13px] text-gray-400 group-hover:text-orange-500'>Click to upload images</p>
+                                    <p className='text-[13px] text-gray-400 group-hover:text-orange-500'>Click to upload new images</p>
                                     <p className='text-[11px] text-gray-300'>Select up to 4 images</p>
                                 </>
                             )}
@@ -109,7 +138,7 @@ const Add = ({ url, token }) => {
                     <input onChange={onImageChange} type="file" id="image" hidden multiple accept="image/*" />
                     {images.length > 0 && (
                         <button type="button" onClick={() => setImages([])} className='text-xs text-red-500 font-bold hover:underline self-end'>
-                            Clear All
+                            Restore Originals
                         </button>
                     )}
                 </div>
@@ -145,7 +174,7 @@ const Add = ({ url, token }) => {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div className="flex flex-col gap-2">
                             <p className='text-sm font-bold text-gray-700'>Category</p>
-                            <select onChange={onChangeHandler} name="category" className='p-3.5 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:border-orange-500 focus:bg-white transition-all text-sm font-medium cursor-pointer'>
+                            <select onChange={onChangeHandler} value={data.category} name="category" className='p-3.5 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:border-orange-500 focus:bg-white transition-all text-sm font-medium cursor-pointer'>
                                 <option value="Salad">Salad</option>
                                 <option value="Rolls">Rolls</option>
                                 <option value="Deserts">Deserts</option>
@@ -158,7 +187,7 @@ const Add = ({ url, token }) => {
                         </div>
                         <div className="flex flex-col gap-2">
                             <p className='text-sm font-bold text-gray-700'>Food Type</p>
-                            <select onChange={onChangeHandler} name="veg" className='p-3.5 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:border-orange-500 focus:bg-white transition-all text-sm font-medium cursor-pointer'>
+                            <select onChange={onChangeHandler} value={data.veg} name="veg" className='p-3.5 bg-gray-50 border border-gray-100 rounded-2xl outline-none focus:border-orange-500 focus:bg-white transition-all text-sm font-medium cursor-pointer'>
                                 <option value="true">Veg</option>
                                 <option value="false">Non-Veg</option>
                             </select>
@@ -177,13 +206,18 @@ const Add = ({ url, token }) => {
                         </div>
                     </div>
 
-                    <button type='submit' className='mt-4 w-full md:w-fit px-12 py-4 bg-orange-500 text-white font-bold rounded-2xl hover:bg-orange-600 transition-all hover:scale-[1.02] active:scale-95 shadow-lg shadow-orange-100'>
-                        Add Product
-                    </button>
+                    <div className="flex gap-4">
+                        <button type='submit' className='mt-4 w-full md:w-fit px-12 py-4 bg-orange-500 text-white font-bold rounded-2xl hover:bg-orange-600 transition-all hover:scale-[1.02] active:scale-95 shadow-lg shadow-orange-100'>
+                            Update Product
+                        </button>
+                        <button type='button' onClick={() => navigate('/admin/list')} className='mt-4 w-full md:w-fit px-12 py-4 bg-gray-100 text-gray-600 font-bold rounded-2xl hover:bg-gray-200 transition-all active:scale-95'>
+                            Cancel
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
     )
 }
 
-export default Add
+export default Edit

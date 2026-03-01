@@ -4,6 +4,7 @@ import { StoreContext } from '../../context/StoreContext';
 import { HiOutlineSearch, HiOutlineUser, HiOutlineLogout } from "react-icons/hi";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { FiMenu, FiX, FiPackage } from "react-icons/fi";
+import logo from '../../assets/logo/logo.png';
 import './NotificationPanel.css';
 
 const Navbar = ({ searchQuery, setSearchQuery }) => {
@@ -91,13 +92,10 @@ const Navbar = ({ searchQuery, setSearchQuery }) => {
 
     return (
         <div className={`fixed top-0 left-0 right-0 z-[1000] transition-all duration-300 ${isScrolled ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100' : 'bg-transparent'}`}>
-            <nav className='flex justify-between items-center w-full px-4 sm:px-6 md:px-8 lg:w-[85%] xl:w-[80%] m-auto py-4 md:py-6'>
+            <nav className='flex justify-between items-center w-full px-4 sm:px-6 md:px-8 lg:w-[85%] xl:w-[80%] m-auto py-0'>
                 {/* Logo Section */}
                 <div onClick={handleHomeClick} className='flex items-center cursor-pointer'>
-                    <h1 className='text-[24px] sm:text-[30px] lg:text-[34px] font-black tracking-tight'>
-                        <span className='text-[#ff7e00]'>Flavo</span>
-                        <span className='text-[#323232]'>Hub</span>
-                    </h1>
+                    <img src={logo} alt="FlavoHub" className='h-20 sm:h-24 lg:h-28 w-auto object-contain transition-all duration-300' />
                 </div>
 
                 {/* Desktop Navigation */}
@@ -200,45 +198,68 @@ const Navbar = ({ searchQuery, setSearchQuery }) => {
 
             {/* Mobile Sidebar Overlay */}
             <div
-                className={`fixed inset-0 z-[2000] transition-opacity duration-300 ${isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
-                style={{ backgroundColor: 'rgba(0,0,0,0.55)' }}
+                className={`fixed inset-0 z-[2000] transition-all duration-300 ${isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+                style={{ backgroundColor: 'rgba(0,0,0,0.6)' }}
                 onClick={() => setIsMobileMenuOpen(false)}
             >
-                <div className={`absolute top-0 right-0 h-full w-[80%] max-w-[320px] bg-white shadow-2xl transition-transform duration-500 ease-out py-10 px-8 flex flex-col gap-10 ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`} onClick={e => e.stopPropagation()}>
-                    <div className='flex justify-between items-center w-full'>
-                        <h1 className='text-2xl font-black'>
-                            <span className='text-[#ff7e00]'>Flavo</span>Hub
-                        </h1>
-                        <FiX className='text-3xl cursor-pointer' onClick={() => setIsMobileMenuOpen(false)} />
+                <div
+                    className={`fixed top-0 right-0 h-screen w-[85%] max-w-[350px] bg-white shadow-2xl transition-transform duration-500 ease-out flex flex-col ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
+                    onClick={e => e.stopPropagation()}
+                >
+                    {/* Sidebar Header */}
+                    <div className='flex justify-between items-center px-6 py-6 border-b border-gray-50'>
+                        <img src={logo} alt="FlavoHub" className='h-12 w-auto object-contain' />
+                        <div
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className='p-2 bg-gray-50 rounded-xl text-gray-400 hover:text-orange-500 transition-colors'
+                        >
+                            <FiX size={24} />
+                        </div>
                     </div>
 
-                    <ul className='flex flex-col gap-8 text-xl font-bold text-gray-700'>
-                        <li onClick={() => { handleHomeClick(); setIsMobileMenuOpen(false); }}>Home</li>
-                        <li onClick={() => { handleNavClick("all-foods", "menu"); setIsMobileMenuOpen(false); }}>Menu</li>
-                        <li onClick={() => { handleNavClick("footer", "contact-us"); setIsMobileMenuOpen(false); }}>Contact</li>
+                    {/* Navigation Links */}
+                    <ul className='flex flex-col p-6 gap-2'>
+                        {[
+                            { name: "Home", id: "home", action: handleHomeClick },
+                            { name: "Menu", id: "all-foods", menuName: "menu" },
+                            { name: "Contact", id: "footer", menuName: "contact-us" }
+                        ].map((item) => (
+                            <li
+                                key={item.name}
+                                onClick={() => {
+                                    if (item.action) item.action();
+                                    else handleNavClick(item.id, item.menuName);
+                                    setIsMobileMenuOpen(false);
+                                }}
+                                className={`px-4 py-4 rounded-2xl text-lg font-bold transition-all active:bg-orange-50 ${menu === (item.menuName || item.id) ? 'bg-orange-50 text-orange-600' : 'text-gray-700 hover:bg-gray-50'}`}
+                            >
+                                {item.name}
+                            </li>
+                        ))}
                     </ul>
 
-                    <div className='mt-auto pt-10 border-t border-gray-100'>
+                    {/* Auth Section */}
+                    <div className='mt-auto p-6 border-t border-gray-50 bg-gray-50/30'>
                         {!token ? (
                             <button
                                 onClick={() => { setShowLogin(true); setIsMobileMenuOpen(false); }}
-                                className='w-full bg-[#323232] text-white py-4 rounded-2xl font-black text-lg shadow-lg'
+                                className='w-full bg-[#323232] text-white py-4.5 rounded-2xl font-black text-lg shadow-xl shadow-gray-200 active:scale-95 transition-all'
                             >
                                 Sign In
                             </button>
                         ) : (
-                            <div className='flex flex-col gap-4'>
+                            <div className='flex flex-col gap-3'>
                                 <button
                                     onClick={() => { navigate('/myorders'); setIsMobileMenuOpen(false); }}
-                                    className='w-full bg-gray-50 text-gray-700 py-4 rounded-2xl font-black text-lg flex items-center justify-center gap-3'
+                                    className='w-full bg-white text-gray-700 py-4 rounded-2xl font-bold flex items-center justify-center gap-3 border border-gray-100 shadow-sm active:scale-95 transition-all'
                                 >
-                                    <FiPackage /> My Orders
+                                    <FiPackage className='text-orange-500' size={20} /> My Orders
                                 </button>
                                 <button
                                     onClick={() => { logout(); setIsMobileMenuOpen(false); }}
-                                    className='w-full bg-red-50 text-red-600 py-4 rounded-2xl font-black text-lg flex items-center justify-center gap-3'
+                                    className='w-full bg-red-50 text-red-600 py-4 rounded-2xl font-bold flex items-center justify-center gap-3 active:scale-95 transition-all border border-red-100/50'
                                 >
-                                    <HiOutlineLogout /> Logout
+                                    <HiOutlineLogout size={20} /> Logout
                                 </button>
                             </div>
                         )}

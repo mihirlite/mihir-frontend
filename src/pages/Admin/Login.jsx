@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { MdEmail, MdLockOutline, MdOutlineAdminPanelSettings } from "react-icons/md";
+import logo from '../../assets/logo/logo.png'
 
 const Login = ({ setToken, url }) => {
     const [data, setData] = useState({
@@ -45,8 +46,8 @@ const Login = ({ setToken, url }) => {
             <div className='w-full max-w-[450px] animate-fadeIn'>
                 <div className='bg-white/80 backdrop-blur-3xl p-8 md:p-12 rounded-[3rem] border border-gray-100 shadow-2xl shadow-orange-500/5 relative z-10'>
                     <div className='flex flex-col items-center mb-10'>
-                        <div className='w-20 h-20 bg-orange-500 rounded-3xl flex items-center justify-center shadow-lg shadow-orange-200 mb-6'>
-                            <MdOutlineAdminPanelSettings className='text-4xl text-white' />
+                        <div className='w-full flex items-center justify-center mb-6'>
+                            <img src={logo} alt="Logo" className='w-32 object-contain' />
                         </div>
                         <h2 className='text-3xl font-black text-gray-800 tracking-tight'>Admin Portal</h2>
                         <p className='text-gray-400 font-medium mt-2'>Secure access for Flavohub</p>

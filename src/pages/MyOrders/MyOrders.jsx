@@ -117,7 +117,7 @@ const MyOrders = () => {
                                 <div className='flex flex-wrap items-center gap-6 md:gap-10 border-t lg:border-t-0 border-gray-50 pt-6 lg:pt-0'>
                                     <div className='flex-1 lg:flex-none text-center lg:text-left'>
                                         <p className='text-xs font-bold text-gray-400 uppercase tracking-widest mb-1'>Total Amount</p>
-                                        <p className='text-2xl font-black text-gray-800'>${order.amount}.00</p>
+                                        <p className='text-2xl font-black text-gray-800'>₹{order.amount}.00</p>
                                     </div>
 
                                     {order.status !== "Delivered" && order.status !== "Cancelled" && (

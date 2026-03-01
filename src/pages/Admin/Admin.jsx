@@ -3,13 +3,18 @@ import Sidebar from '../../components/Sidebar/Sidebar'
 import { Routes, Route, useNavigate } from 'react-router-dom'
 import Add from './Add/Add'
 import List from './List/List'
+import Edit from './Edit/Edit'
 import Orders from './Orders/Orders'
 import Users from './Users/Users'
+import Coupons from './Coupons/Coupons'
+import DeliveryFee from './DeliveryFee/DeliveryFee'
+import GSTCharges from './GSTCharges/GSTCharges'
 import Login from './Login'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { MdNotificationsNone, MdNotificationsActive, MdMenu, MdClose, MdLogout } from "react-icons/md";
 import axios from 'axios';
+import logo from '../../assets/logo/logo.png'
 import '../../components/Navbar/NotificationPanel.css';
 
 const Admin = () => {
@@ -73,9 +78,7 @@ const Admin = () => {
                         >
                             {isSidebarOpen ? <MdClose size={24} /> : <MdMenu size={24} />}
                         </button>
-                        <h2 className='text-xl md:text-2xl font-black bg-gradient-to-r from-orange-600 to-orange-400 bg-clip-text text-transparent'>
-                            Admin Panel
-                        </h2>
+                        <img src={logo} alt="Logo" className='w-24 md:w-32 object-contain' />
                     </div>
 
                     <div className='relative flex items-center gap-4 md:gap-6'>
@@ -146,8 +149,12 @@ const Admin = () => {
                         <Routes>
                             <Route path='/add' element={<Add url={url} token={token} />} />
                             <Route path='/list' element={<List url={url} token={token} />} />
+                            <Route path='/edit/:id' element={<Edit url={url} token={token} />} />
                             <Route path='/orders' element={<Orders url={url} token={token} />} />
                             <Route path='/users' element={<Users url={url} token={token} />} />
+                            <Route path='/coupons' element={<Coupons url={url} token={token} />} />
+                            <Route path='/delivery' element={<DeliveryFee url={url} token={token} />} />
+                            <Route path='/gst-charges' element={<GSTCharges url={url} token={token} />} />
                         </Routes>
                     </div>
                 </main>
