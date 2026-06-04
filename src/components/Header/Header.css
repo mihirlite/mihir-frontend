@@ -1,0 +1,355 @@
+/* ============================================
+   Header.css – Premium Hero (Reference Design)
+   ============================================ */
+
+/* ── Section Wrapper ── */
+.hero-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 90vh; /* Taller to accommodate cards and bottom buttons */
+    position: relative;
+    overflow: hidden;
+    margin-top: 80px;
+    padding-top: 40px;
+    padding-bottom: 120px; /* Space for fixed buttons at bottom */
+    box-sizing: border-box;
+    background-color: #ffffff;
+}
+
+/* ── Background Video & Overlay Removed styles ── */
+.hero-bg-video, .hero-bg-overlay {
+    display: none !important;
+}
+
+/* ── Top Branding Section ── */
+.hero-text-container {
+    text-align: center;
+    margin-bottom: 3.5rem;
+    padding: 0 1.5rem;
+    z-index: 20;
+    max-width: 1000px;
+}
+
+.hero-title {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #1a1a1a;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+    text-transform: capitalize;
+}
+
+.highlight-price {
+    color: #ff7e00;
+    position: relative;
+    display: inline-block;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #555;
+    letter-spacing: 0.01em;
+}
+
+/* ── Entrance Animation ── */
+.animate-fadeInUp {
+    animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 1.8rem;
+    }
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+    .hero-text-container {
+        margin-bottom: 2.5rem;
+    }
+}
+
+/* ── Content Grid ── */
+.hero-content-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 2.5rem;
+    z-index: 10;
+    padding: 0 1.5rem;
+}
+
+.hero-left-content, .hero-right-content {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (min-width: 1024px) {
+    .hero-section {
+        min-height: 85vh;
+        padding-top: 0;
+    }
+    .hero-content-grid {
+        flex-direction: row;
+        gap: 4rem;
+        max-width: 1200px;
+        padding-bottom: 40px;
+    }
+    .hero-left-content, .hero-right-content {
+        flex: 1;
+    }
+}
+
+/* ── Video Card ── */
+.hero-video-card {
+    position: relative;
+    width: 100%;
+    max-width: 450px; /* Standardized size */
+    aspect-ratio: 1.4 / 1;
+    border-radius: 2.5rem;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
+    border: 6px solid #fff;
+}
+
+.hero-card-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.badge-top-left {
+    top: 15px !important;
+    left: 15px !important;
+}
+
+/* ── Hero Footer (Buttons) ── */
+.hero-footer {
+    position: absolute;
+    bottom: 35px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    z-index: 30;
+    width: 100%;
+}
+
+@media (max-width: 480px) {
+    .hero-video-card {
+        border-radius: 1.5rem;
+        border-width: 4px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+    
+    .hero-footer {
+        bottom: 25px;
+    }
+}
+
+/* ── CTA Row ── */
+.hero-cta-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: nowrap; /* Ensure they stay side-by-side */
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+@media (max-width: 480px) {
+    .hero-cta-row {
+        gap: 0.6rem; /* Tighter gap for mobile */
+        padding: 0 0.5rem;
+    }
+    
+    .btn-primary, .btn-outline {
+        padding: 0.75rem 1rem !important; /* Smaller padding */
+        font-size: 0.9rem !important; /* Smaller font */
+        flex: 1; /* Both take equal space */
+        text-align: center;
+        min-width: 0; /* Allows buttons to shrink */
+    }
+}
+
+@media (min-width: 1024px) {
+    .hero-cta-row {
+        justify-content: center;
+    }
+}
+
+.btn-primary {
+    background: transparent;
+    color: #ff7e00;
+    border: 2px solid #ff7e00;
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 0.9rem 2.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(255, 126, 0, 0.15);
+    white-space: nowrap;
+}
+
+.btn-primary:hover {
+    background: #ff7e00;
+    color: #fff;
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(255, 126, 0, 0.45);
+}
+
+.btn-outline {
+    background: transparent;
+    color: #1a1a1a;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0.85rem 2.25rem;
+    border-radius: 50px;
+    border: 2px solid #e0e0e0;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.btn-outline:hover {
+    background: #ff7e00;
+    border-color: #ff7e00;
+    color: #fff;
+    transform: translateY(-3px);
+}
+
+/* ── Image Card ── */
+.hero-image-card {
+    position: relative;
+    width: 100%;
+    max-width: 450px; /* Standardized size */
+    aspect-ratio: 1.4 / 1;
+    border-radius: 2.5rem;
+    overflow: visible; /* Changed from hidden so badge isn't cut off */
+    background: #fff;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
+    border: 6px solid #fff;
+}
+
+.hero-swiper {
+    width: 100%;
+    height: 100%; /* Fill the aspect-ratio container */
+    border-radius: 2rem;
+    overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+    .hero-image-card, .hero-video-card {
+        max-width: 480px; /* Slightly larger on desktop */
+    }
+}
+
+.hero-swiper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ── Floating Badges ── */
+.badge {
+    position: absolute;
+    background: #fff;
+    border-radius: 0.85rem;
+    padding: 0.6rem 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    z-index: 20;
+    min-width: 140px;
+    white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+    .badge {
+        padding: 0.4rem 0.6rem;
+        gap: 0.4rem;
+        min-width: auto;
+        border-radius: 0.6rem;
+    }
+    .badge-top {
+        top: -10px !important;
+        left: 10px !important;
+    }
+    .badge-icon {
+        font-size: 1.1rem !important;
+    }
+    .badge-title {
+        font-size: 0.7rem !important;
+    }
+    .badge-sub {
+        font-size: 0.6rem !important;
+    }
+}
+
+.badge-top {
+    top: -14px;
+    left: 16px;
+}
+
+.badge-bottom {
+    bottom: -14px;
+    right: 16px;
+}
+
+.badge-icon {
+    font-size: 1.4rem;
+    line-height: 1;
+}
+
+.badge-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.badge-sub {
+    font-size: 0.68rem;
+    font-weight: 500;
+    color: #888;
+    margin: 0;
+    line-height: 1.2;
+}
+
+/* ── Swiper Pagination ── */
+.swiper-pagination-bullet {
+    width: 7px !important;
+    height: 7px !important;
+    background: rgba(255, 255, 255, 0.7) !important;
+    opacity: 1 !important;
+    transition: all 0.3s ease !important;
+}
+
+.swiper-pagination-bullet-active {
+    width: 20px !important;
+    background: #ff7e00 !important;
+    border-radius: 4px !important;
+}

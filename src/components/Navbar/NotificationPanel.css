@@ -1,0 +1,125 @@
+.notification-dropdown {
+    position: absolute;
+    top: 75px;
+    right: 0;
+    width: 340px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 2rem;
+    box-shadow:
+        0 20px 50px -12px rgba(0, 0, 0, 0.15),
+        0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    z-index: 1000;
+    overflow: hidden;
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(15px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.notification-header {
+    padding: 0.75rem 1rem;
+    font-weight: 900;
+    font-size: 1.1rem;
+    color: #1a1a1a;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notification-header span {
+    color: #ff7e00;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.notification-list {
+    max-height: 450px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    scrollbar-width: none;
+}
+
+.notification-list::-webkit-scrollbar {
+    display: none;
+}
+
+.notification-item {
+    padding: 1rem 1.25rem;
+    border-radius: 1.25rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 13px;
+    line-height: 1.5;
+    border: 1px solid transparent;
+    margin-bottom: 2px;
+}
+
+.notification-item.unread {
+    background: rgba(255, 126, 0, 0.05);
+    color: #000;
+    font-weight: 700;
+}
+
+.notification-item:hover {
+    background: white;
+    border-color: rgba(255, 126, 0, 0.1);
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.notif-msg {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.notif-date {
+    font-size: 10px;
+    color: #94a3b8;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.notif-badge-dot {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: #ff3b30;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(255, 59, 48, 0.3);
+}
+
+/* Mobile Adjustments */
+@media (max-width: 640px) {
+    .notification-dropdown {
+        position: fixed;
+        top: 85px;
+        left: 15px;
+        right: 15px;
+        width: auto;
+        max-width: none;
+    }
+}
