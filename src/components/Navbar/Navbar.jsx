@@ -113,11 +113,11 @@ const Navbar = ({ searchQuery, setSearchQuery }) => {
             
             <div className={`transition-all duration-300 ease-in-out ${isScrolled ? 'py-1' : 'py-2'}`}>
                 <div className={`mx-auto px-4 sm:px-6 lg:w-[94%] xl:w-[90%] transition-all duration-300 ${isScrolled ? 'bg-white/90 backdrop-blur-md shadow-sm rounded-none sm:rounded-b-[1rem] border-b border-gray-100' : 'bg-transparent'}`}>
-                    <nav className='flex justify-between items-center h-12 sm:h-14 px-2 sm:px-4 relative'>
+                    <nav className='flex justify-between items-center h-16 sm:h-16 px-2 sm:px-4 relative'>
 
                         {/* Logo */}
                         <div onClick={handleHomeClick} className='flex items-center cursor-pointer group'>
-                            <img src={logo} alt="FlavoHub" className='h-8 sm:h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105 select-none' />
+                            <img src={logo} alt="FlavoHub" className='h-12 sm:h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105 select-none' />
                         </div>
 
                         {/* Right Actions: Cart & Menu */}
