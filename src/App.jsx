@@ -31,6 +31,7 @@ const Success = React.lazy(() => import('./pages/Success/Success'));
 // Component lazy loading
 const LoginPopup = React.lazy(() => import('./components/LoginPopup/LoginPopup'));
 const Footer = React.lazy(() => import('./components/Footer/Footer'));
+const FloatingCart = React.lazy(() => import('./components/FloatingCart/FloatingCart'));
 
 // Loading Fallback
 const LoadingSpinner = () => (
@@ -186,6 +187,7 @@ const App = () => {
             } />
           </Routes>
         </div>
+        {!isSystemRoute && <FloatingCart />}
         {!isSystemRoute && <Footer />}
       </React.Suspense>
       <PwaInstallPopup 

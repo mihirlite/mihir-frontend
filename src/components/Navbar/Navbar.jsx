@@ -2,9 +2,9 @@ import React, { useContext, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { StoreContext } from '../../context/StoreContext';
-import { HiOutlineSearch, HiOutlineUser, HiOutlineLogout, HiOutlineBell } from "react-icons/hi";
+import { HiOutlineUser, HiOutlineLogout, HiOutlineBell } from "react-icons/hi";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
-import { FiMenu, FiX, FiPackage, FiBox, FiLogOut, FiShoppingBag, FiBell } from "react-icons/fi";
+import { FiMenu, FiX, FiPackage, FiBox, FiLogOut, FiShoppingBag, FiBell, FiSearch } from "react-icons/fi";
 import logo from '../../assets/logo/logo.png';
 import './NotificationPanel.css';
 
@@ -12,7 +12,6 @@ const Navbar = ({ searchQuery, setSearchQuery }) => {
     const [menu, setMenu] = useState("home");
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
-    const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [showProfileDropdown, setShowProfileDropdown] = useState(false);
     const [showNotifications, setShowNotifications] = useState(false);
     const [notifications, setNotifications] = useState([]);
@@ -112,136 +111,89 @@ const Navbar = ({ searchQuery, setSearchQuery }) => {
                 </div>
             )}
             
-            <div className={`transition-all duration-500 ease-in-out ${isScrolled ? 'py-1 sm:py-2' : 'py-2 sm:py-4'}`}>
-                <div className={`mx-auto px-4 sm:px-6 lg:w-[94%] xl:w-[90%] transition-all duration-500 ${isScrolled ? 'bg-white/80 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.08)] rounded-[2.5rem] border border-white/40' : 'bg-transparent'}`}>
-                    <nav className='flex justify-between items-center h-14 sm:h-16 lg:h-18 px-4 sm:px-6 relative'>
+            <div className={`transition-all duration-300 ease-in-out ${isScrolled ? 'py-1' : 'py-2'}`}>
+                <div className={`mx-auto px-4 sm:px-6 lg:w-[94%] xl:w-[90%] transition-all duration-300 ${isScrolled ? 'bg-white/90 backdrop-blur-md shadow-sm rounded-none sm:rounded-b-[1rem] border-b border-gray-100' : 'bg-transparent'}`}>
+                    <nav className='flex justify-between items-center h-12 sm:h-14 px-2 sm:px-4 relative'>
 
                         {/* Logo */}
                         <div onClick={handleHomeClick} className='flex items-center cursor-pointer group'>
-                            <img src={logo} alt="FlavoHub" className='h-14 sm:h-18 lg:h-22 w-auto object-contain transition-transform duration-500 group-hover:scale-105 select-none' />
+                            <img src={logo} alt="FlavoHub" className='h-8 sm:h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105 select-none' />
                         </div>
 
-                        {/* Desktop Navigation */}
-                        <div className='hidden lg:flex items-center gap-12'>
-                            <ul className='flex items-center gap-10 text-[#323232] font-black text-[16px] tracking-tight uppercase'>
-                                {['Home', 'Menu', 'Contact'].map((item) => (
-                                    <li
-                                        key={item}
-                                        onClick={() => item === 'Home' ? handleHomeClick() : handleNavClick(item === 'Menu' ? 'all-foods' : 'footer', item.toLowerCase() === 'contact' ? 'contact-us' : item.toLowerCase())}
-                                        className={`cursor-pointer transition-all duration-300 relative group truncate ${menu === (item === 'Contact' ? 'contact-us' : item.toLowerCase()) ? 'text-orange-500' : 'hover:text-orange-500'}`}
-                                    >
-                                        {item}
-                                        <span className={`absolute -bottom-1 left-0 h-0.5 bg-orange-500 transition-all duration-300 ${menu === (item === 'Contact' ? 'contact-us' : item.toLowerCase()) ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
-                                    </li>
-                                ))}
-                            </ul>
+                        {/* Right Actions: Cart & Menu */}
+                        <div className='flex items-center gap-2 sm:gap-4'>
+                            
+                            {/* Profile / Notifications if logged in */}
+                            {token && (
+                                <div className='hidden sm:flex items-center gap-2 mr-2'>
+                                    {/* Notifications Dropdown Container */}
+                                    <div className='relative'>
+                                        <div onClick={() => { setShowNotifications(!showNotifications); setShowProfileDropdown(false); }} className={`p-2.5 rounded-xl cursor-pointer transition-all duration-300 ${showNotifications ? 'bg-orange-500 text-white shadow-lg' : 'text-[#323232] hover:bg-orange-50 hover:text-orange-500'}`}>
+                                            <FiBell size={20} />
+                                            {unreadCount > 0 && <span className='notif-badge-dot'></span>}
+                                        </div>
+                                        {showNotifications && (
+                                            <div className="notification-dropdown">
+                                                <div className="notification-header">
+                                                    Notifications <span>{unreadCount} New</span>
+                                                </div>
+                                                <div className="notification-list">
+                                                    {notifications.length === 0 ? (
+                                                        <p className="p-10 text-center text-gray-400 font-bold italic text-sm">Delicious updates coming soon!</p>
+                                                    ) : (
+                                                        notifications.map(notif => (
+                                                            <div key={notif._id} onClick={() => { markRead(notif._id); navigate('/myorders'); setShowNotifications(false); }} className={`notification-item ${!notif.read ? 'unread' : ''}`}>
+                                                                <span className="notif-msg font-bold mb-1">{notif.message}</span>
+                                                                <span className="notif-date flex justify-between items-center text-[10px]">
+                                                                    {new Date(notif.date).toLocaleDateString()} at {new Date(notif.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                                    {!notif.read && <span className="w-1.5 h-1.5 bg-orange-500 rounded-full"></span>}
+                                                                </span>
+                                                            </div>
+                                                        ))
+                                                    )}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
 
-                            <div className='h-8 w-[1px] bg-gray-100 hidden xl:block'></div>
-
-                            {/* Actions */}
-                            <div className='flex items-center gap-5'>
-                                {/* Search */}
-                                <div className={`flex items-center gap-2 group transition-all duration-500 ${isSearchOpen ? 'bg-gray-100/50 px-4 py-2.5 rounded-2xl border border-orange-100/50 shadow-inner' : ''}`}>
-                                    {isSearchOpen && (
-                                        <input
-                                            autoFocus
-                                            type="text"
-                                            placeholder="Craving something?..."
-                                            value={searchQuery}
-                                            onChange={(e) => { setSearchQuery(e.target.value); if (window.location.pathname !== '/') navigate('/'); }}
-                                            onKeyDown={(e) => { if (e.key === 'Enter') document.getElementById('all-foods')?.scrollIntoView({ behavior: 'smooth' }); }}
-                                            className="bg-transparent outline-none text-[#1a1a1a] font-bold w-40 xl:w-56 placeholder-gray-400 text-sm animate-fadeIn"
-                                        />
-                                    )}
-                                    <div onClick={() => { setIsSearchOpen(!isSearchOpen); if (isSearchOpen) setSearchQuery(""); }} className={`p-2.5 rounded-xl transition-all duration-300 cursor-pointer ${isSearchOpen ? 'bg-orange-500 text-white animate-pulseRing' : 'text-[#323232] hover:bg-orange-50 hover:text-orange-500'}`}>
-                                        {isSearchOpen ? <FiX size={20} /> : <HiOutlineSearch size={24} />}
+                                    {/* Profile Dropdown */}
+                                    <div className='relative'>
+                                        <div onClick={() => { setShowProfileDropdown(!showProfileDropdown); setShowNotifications(false); }} className={`p-2 rounded-xl cursor-pointer transition-all duration-300 active:scale-90 ${showProfileDropdown ? 'bg-gray-100/80 scale-105' : 'hover:bg-gray-50'}`}>
+                                            <div className='w-8 h-8 rounded-xl bg-gradient-to-br from-orange-100 to-orange-50 flex items-center justify-center text-orange-600 font-black text-xs uppercase border border-white'>
+                                                <HiOutlineUser size={20} />
+                                            </div>
+                                        </div>
+                                        {showProfileDropdown && (
+                                            <ul className='absolute right-0 mt-5 w-56 bg-white/95 backdrop-blur-xl rounded-[2rem] shadow-[0_20px_60px_rgba(0,0,0,0.1)] border border-white py-3 animate-fadeIn flex flex-col p-2 gap-1'>
+                                                <li onClick={() => { navigate('/myorders'); setShowProfileDropdown(false); }} className='flex items-center gap-3 px-5 py-3.5 hover:bg-orange-50 rounded-2xl cursor-pointer text-gray-700 font-black text-sm transition-all group'>
+                                                    <FiPackage className='text-orange-500 transition-transform group-hover:scale-110' size={18} /> Orders
+                                                </li>
+                                                <div className='mx-4 h-[1px] bg-gray-50'></div>
+                                                <li onClick={() => { logout(); setShowProfileDropdown(false); }} className='flex items-center gap-3 px-5 py-3.5 hover:bg-red-50 rounded-2xl cursor-pointer text-gray-700 font-black text-sm transition-all group'>
+                                                    <FiLogOut className='text-red-500 transition-transform group-hover:scale-110' size={18} /> Logout
+                                                </li>
+                                            </ul>
+                                        )}
                                     </div>
                                 </div>
+                            )}
 
-                                {/* Cart */}
-                                <Link to='/cart' aria-label="View shopping cart" className='relative p-2.5 rounded-xl text-[#323232] hover:bg-orange-50 hover:text-orange-500 transition-all active:scale-90 active:rotate-3'>
-                                    <FiShoppingBag size={24} />
-                                    {getTotalCartAmount() > 0 && (
-                                        <span className='absolute -top-1 -right-1 bg-orange-500 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-black border-2 border-white shadow-lg animate-bounce-slow'>
-                                            {Object.keys(cartItems || {}).filter(id => cartItems[id] > 0).length}
-                                        </span>
-                                    )}
-                                </Link>
-
-                                {/* Auth & Notifications */}
-                                {!token ? (
-                                    <button
-                                        onClick={() => setShowLogin(true)}
-                                        className='bg-gradient-to-r from-orange-600 to-orange-500 text-white py-3.5 px-9 rounded-2xl font-black text-sm hover:shadow-[0_8px_25px_rgba(255,126,0,0.3)] transition-all active:scale-95 uppercase tracking-widest'
-                                    >
-                                        Login
-                                    </button>
-                                ) : (
-                                    <div className='flex items-center gap-2'>
-                                        {/* Notifications Dropdown Container */}
-                                        <div className='relative'>
-                                            <div onClick={() => { setShowNotifications(!showNotifications); setShowProfileDropdown(false); }} className={`p-2.5 rounded-xl cursor-pointer transition-all duration-300 ${showNotifications ? 'bg-orange-500 text-white shadow-lg' : 'text-[#323232] hover:bg-orange-50 hover:text-orange-500'}`}>
-                                                <FiBell size={24} />
-                                                {unreadCount > 0 && <span className='notif-badge-dot'></span>}
-                                            </div>
-                                            {showNotifications && (
-                                                <div className="notification-dropdown">
-                                                    <div className="notification-header">
-                                                        Notifications <span>{unreadCount} New</span>
-                                                    </div>
-                                                    <div className="notification-list">
-                                                        {notifications.length === 0 ? (
-                                                            <p className="p-10 text-center text-gray-400 font-bold italic text-sm">Delicious updates coming soon!</p>
-                                                        ) : (
-                                                            notifications.map(notif => (
-                                                                <div key={notif._id} onClick={() => { markRead(notif._id); navigate('/myorders'); setShowNotifications(false); }} className={`notification-item ${!notif.read ? 'unread' : ''}`}>
-                                                                    <span className="notif-msg font-bold mb-1">{notif.message}</span>
-                                                                    <span className="notif-date flex justify-between items-center text-[10px]">
-                                                                        {new Date(notif.date).toLocaleDateString()} at {new Date(notif.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                                                        {!notif.read && <span className="w-1.5 h-1.5 bg-orange-500 rounded-full"></span>}
-                                                                    </span>
-                                                                </div>
-                                                            ))
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        {/* Profile Dropdown */}
-                                        <div className='relative'>
-                                            <div onClick={() => { setShowProfileDropdown(!showProfileDropdown); setShowNotifications(false); }} className={`p-2 rounded-xl cursor-pointer transition-all duration-300 active:scale-90 ${showProfileDropdown ? 'bg-gray-100/80 scale-105' : 'hover:bg-gray-50'}`}>
-                                                <div className='w-10 h-10 rounded-xl bg-gradient-to-br from-orange-100 to-orange-50 flex items-center justify-center text-orange-600 font-black text-xs uppercase border border-white'>
-                                                    <HiOutlineUser size={24} />
-                                                </div>
-                                            </div>
-                                            {showProfileDropdown && (
-                                                <ul className='absolute right-0 mt-5 w-56 bg-white/95 backdrop-blur-xl rounded-[2rem] shadow-[0_20px_60px_rgba(0,0,0,0.1)] border border-white py-3 animate-fadeIn flex flex-col p-2 gap-1'>
-                                                    <li onClick={() => { navigate('/myorders'); setShowProfileDropdown(false); }} className='flex items-center gap-3 px-5 py-3.5 hover:bg-orange-50 rounded-2xl cursor-pointer text-gray-700 font-black text-sm transition-all group'>
-                                                        <FiPackage className='text-orange-500 transition-transform group-hover:scale-110' size={18} /> Orders
-                                                    </li>
-                                                    <div className='mx-4 h-[1px] bg-gray-50'></div>
-                                                    <li onClick={() => { logout(); setShowProfileDropdown(false); }} className='flex items-center gap-3 px-5 py-3.5 hover:bg-red-50 rounded-2xl cursor-pointer text-gray-700 font-black text-sm transition-all group'>
-                                                        <FiLogOut className='text-red-500 transition-transform group-hover:scale-110' size={18} /> Logout
-                                                    </li>
-                                                </ul>
-                                            )}
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-
-                        {/* Mobile Controls */}
-                        <div className='lg:hidden flex items-center gap-2 sm:gap-4'>
-                            <Link to='/cart' className='relative p-2 text-[#323232] active:scale-90'>
+                            {/* Cart */}
+                            <Link to='/cart' aria-label="View shopping cart" className='relative p-2.5 rounded-xl text-[#323232] hover:bg-orange-50 hover:text-orange-500 transition-all active:scale-90 active:rotate-3'>
                                 <FiShoppingBag size={24} />
-                                {getTotalCartAmount() > 0 && <span className='absolute top-1 right-1 w-2.5 h-2.5 bg-orange-500 rounded-full border-2 border-white shadow-sm'></span>}
+                                {getTotalCartAmount() > 0 && (
+                                    <span className='absolute -top-1 -right-1 bg-orange-500 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-black border-2 border-white shadow-lg animate-bounce-slow'>
+                                        {Object.keys(cartItems || {}).filter(id => cartItems[id] > 0).length}
+                                    </span>
+                                )}
                             </Link>
-                            <div onClick={() => setIsMobileMenuOpen(true)} className='p-2.5 rounded-2xl bg-[#323232] text-white active:scale-95 shadow-lg shadow-gray-200 transition-all'>
-                                <FiMenu size={22} />
+
+                            {/* Menu Icon */}
+                            <div onClick={() => setIsMobileMenuOpen(true)} className='p-2 rounded-xl bg-gray-50 text-gray-800 hover:bg-orange-50 hover:text-orange-500 active:scale-95 transition-all cursor-pointer'>
+                                <FiMenu size={24} />
                             </div>
                         </div>
+
                     </nav>
                 </div>
             </div>
@@ -276,21 +228,6 @@ const Navbar = ({ searchQuery, setSearchQuery }) => {
                                 </div>
                             ))}
                         </div>
-
-                        {/* Search in Mobile Menu */}
-                        <div className='mt-8 p-6 bg-gray-50/50 rounded-[2.5rem] border border-gray-100 mb-6'>
-                            <p className='text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4 ml-1'>Quick Search</p>
-                            <div className='flex items-center gap-3 bg-white p-3.5 rounded-2xl shadow-sm border border-gray-100 focus-within:border-orange-500/50 transition-all'>
-                                <FiSearch size={20} className='text-gray-400' />
-                                <input
-                                    type="text"
-                                    placeholder="Search food..."
-                                    value={searchQuery}
-                                    onChange={(e) => { setSearchQuery(e.target.value); if (window.location.pathname !== '/') navigate('/'); }}
-                                    className='bg-transparent outline-none flex-1 font-bold text-gray-800 placeholder-gray-400 min-w-0'
-                                />
-                            </div>
-                        </div>
                     </div>
 
                     {/* Sidebar Footer */}
@@ -316,8 +253,5 @@ const Navbar = ({ searchQuery, setSearchQuery }) => {
         </div>
     );
 };
-
-// Simple search icon for mobile search bar logic
-const FiSearch = ({ size, className }) => <HiOutlineSearch size={size} className={className} />;
 
 export default Navbar;

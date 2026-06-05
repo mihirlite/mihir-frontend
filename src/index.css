@@ -7,7 +7,7 @@ html {
 body {
   min-height: 100vh;
   background-color: #f3f4f6;
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
 a {
@@ -52,4 +52,34 @@ a {
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* Bottom Sheet Animations */
+@keyframes slideUp {
+  0% { transform: translateY(100%); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes slideDown {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(100%); }
+}
+
+.animate-slideUp {
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slideDown {
+  animation: slideDown 0.3s ease-in forwards;
+}
+
+/* Micro-interactions */
+@keyframes pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+.animate-pop {
+  animation: pop 0.3s ease-in-out;
 }

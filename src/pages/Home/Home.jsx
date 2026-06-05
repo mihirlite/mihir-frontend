@@ -1,5 +1,4 @@
 import React, { useContext } from 'react'
-import Header from '../../components/Header/Header'
 import FoodDisplay from '../../components/FoodDisplay/FoodDisplay'
 // import ComboSection from '../../components/ComboSection/ComboSection'
 import WhyChooseUs from '../../components/WhyChooseUs/WhyChooseUs'
@@ -21,23 +20,13 @@ const Home = ({ searchQuery, setSearchQuery }) => {
                 </div>
             )}
             
-            {/* Hero Section */}
-            <div className={generalSettings?.firstOrderOfferEnabled ? "" : "pt-[88px] sm:pt-[104px] lg:pt-[120px]"}>
-                <Header />
-            </div>
-
-            <div className='max-w-[1280px] mx-auto px-3 sm:px-6 lg:px-8'>
+            {/* Search and Food Display Section */}
+            <div className={`max-w-[1280px] mx-auto px-3 sm:px-6 lg:px-8 ${generalSettings?.firstOrderOfferEnabled ? "pt-4" : "pt-[72px] sm:pt-[88px]"}`}>
 
                 {/* {!searchQuery && <ComboSection />} */}
                 
                 {/* Full Menu Section */}
-                <div id='all-foods' className='mt-8 sm:mt-12 md:mt-16 scroll-mt-24 sm:scroll-mt-32 animate-fadeIn'>
-                    <div className='flex items-center gap-3 mb-8 md:mb-12'>
-                        <span className='w-2 h-8 md:h-10 bg-orange-500 rounded-full'></span>
-                        <h2 className='text-gray-800 font-extrabold text-2xl md:text-4xl tracking-tight uppercase'>
-                            Explore our menu
-                        </h2>
-                    </div>
+                <div id='all-foods' className='mt-2 sm:mt-4 md:mt-8 scroll-mt-24 sm:scroll-mt-32 animate-fadeIn'>
                     <FoodDisplay category="All" searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
                 </div>
 
