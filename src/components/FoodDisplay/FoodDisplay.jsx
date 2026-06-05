@@ -9,6 +9,43 @@ const FoodDisplay = ({ searchQuery, setSearchQuery }) => {
     const { food_list } = useContext(StoreContext);
     const [displayCount, setDisplayCount] = useState(8);
     const [activeCategory, setActiveCategory] = useState("All");
+    const [isListening, setIsListening] = useState(false);
+
+    const startVoiceSearch = () => {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            alert("Your browser does not support voice search.");
+            return;
+        }
+
+        const recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'en-IN';
+
+        recognition.onstart = () => {
+            setIsListening(true);
+        };
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            // Remove trailing period if added by some browsers
+            const cleanTranscript = transcript.endsWith('.') ? transcript.slice(0, -1) : transcript;
+            setSearchQuery(cleanTranscript);
+            setIsListening(false);
+        };
+
+        recognition.onerror = (event) => {
+            console.error("Voice search error:", event.error);
+            setIsListening(false);
+        };
+
+        recognition.onend = () => {
+            setIsListening(false);
+        };
+
+        recognition.start();
+    };
 
     const filteredList = (food_list || []).filter(item => {
         if (item.isComboAddon) return false;
@@ -49,7 +86,10 @@ const FoodDisplay = ({ searchQuery, setSearchQuery }) => {
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className='bg-transparent outline-none flex-1 mx-3 text-sm font-medium text-gray-800 placeholder-gray-400 w-full'
                     />
-                    <div className='bg-white p-1.5 rounded-full shadow-sm cursor-pointer hover:bg-orange-50 transition-colors'>
+                    <div 
+                        onClick={startVoiceSearch}
+                        className={`p-1.5 rounded-full shadow-sm cursor-pointer transition-colors ${isListening ? 'bg-orange-100 animate-pulse' : 'bg-white hover:bg-orange-50'}`}
+                    >
                         <HiOutlineMicrophone size={18} className='text-orange-500' />
                     </div>
                 </div>
