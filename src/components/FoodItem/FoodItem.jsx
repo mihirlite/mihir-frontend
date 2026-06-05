@@ -4,7 +4,7 @@ import { StoreContext } from '../../context/StoreContext';
 import { HiHeart, HiOutlineHeart } from 'react-icons/hi';
 import { FiX } from 'react-icons/fi';
 
-const FoodItem = ({ id, name, price, description, image, veg, inStock = true, discount = 0, rating = 4.5, reviewsCount = 124 }) => {
+const FoodItem = ({ id, name, price, description, image, veg, inStock = true, discount = 0, rating = 4.5, reviewsCount = 124, compact = false }) => {
 
     const { cartItems, addToCart, removeFromCart, token, setShowLogin, getImageUrl, updateCartQuantity } = useContext(StoreContext);
     const navigate = useNavigate();
@@ -105,76 +105,77 @@ const FoodItem = ({ id, name, price, description, image, veg, inStock = true, di
 
     return (
         <>
-            {/* Compact Card */}
-            <div 
+            {/* Card — adapts to compact (horizontal row) or standard (grid) mode */}
+            <div
                 onClick={() => setIsSheetOpen(true)}
                 className={`relative bg-white rounded-[16px] shadow-sm hover:shadow-md border border-gray-100 overflow-hidden cursor-pointer active:scale-[0.98] transition-all duration-200 ${!inStock ? 'opacity-80' : ''}`}
             >
-                {/* Image Section (16:9 ratio) */}
-                <div className="relative w-full pt-[56.25%] bg-gray-100">
-                    <img 
-                        src={displayImage} 
+                {/* Image */}
+                <div className={`relative w-full bg-gray-100 ${compact ? 'pt-[100%]' : 'pt-[56.25%]'}`}>
+                    <img
+                        src={displayImage}
                         alt={name}
                         className="absolute inset-0 w-full h-full object-cover"
                     />
-                    
-                    {/* Top Left Badge */}
+
+                    {/* IN STOCK badge */}
                     <div className="absolute top-2 left-2 z-10">
-                        <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm ${inStock ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`}>
+                        <span className={`px-2 py-0.5 rounded-full font-bold uppercase tracking-wider shadow-sm ${compact ? 'text-[9px]' : 'text-[10px]'} ${inStock ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`}>
                             {inStock ? 'IN STOCK' : 'SOLD OUT'}
                         </span>
                     </div>
 
-                    {/* Top Right Heart */}
-                    <button 
+                    {/* Heart */}
+                    <button
                         onClick={toggleFavorite}
-                        className="absolute top-2 right-2 z-10 p-1.5 bg-white/80 backdrop-blur-sm rounded-full shadow-sm animate-pop"
+                        className={`absolute top-2 right-2 z-10 bg-white/80 backdrop-blur-sm rounded-full shadow-sm ${compact ? 'p-1' : 'p-1.5'}`}
                     >
-                        {isFavorite ? (
-                            <HiHeart className="text-[#FF6B00] w-5 h-5" />
-                        ) : (
-                            <HiOutlineHeart className="text-gray-500 w-5 h-5" />
-                        )}
+                        {isFavorite
+                            ? <HiHeart className={`text-[#FF6B00] ${compact ? 'w-4 h-4' : 'w-5 h-5'}`} />
+                            : <HiOutlineHeart className={`text-gray-500 ${compact ? 'w-4 h-4' : 'w-5 h-5'}`} />
+                        }
                     </button>
                 </div>
 
                 {/* Card Content */}
-                <div className="p-3 pb-4">
-                    <div className="flex justify-between items-start gap-2 mb-1">
-                        <h3 className="font-bold text-gray-800 text-[18px] line-clamp-1 leading-snug">{name}</h3>
-                        <div className={`flex-shrink-0 w-3.5 h-3.5 border-[1.5px] p-[1.5px] flex justify-center items-center rounded-sm ${veg ? "border-green-600" : "border-red-600"}`}>
-                            <div className={`w-full h-full rounded-full ${veg ? "bg-green-600" : "bg-red-600"}`}></div>
+                <div className={compact ? 'p-2 pb-10' : 'p-3 pb-12'}>
+                    <div className="flex justify-between items-start gap-1 mb-1">
+                        <h3 className={`font-bold text-gray-800 line-clamp-2 leading-snug ${compact ? 'text-[13px]' : 'text-[18px]'}`}>
+                            {name}
+                        </h3>
+                        <div className={`flex-shrink-0 border-[1.5px] p-[1.5px] flex justify-center items-center rounded-sm mt-0.5 ${compact ? 'w-3 h-3' : 'w-3.5 h-3.5'} ${veg ? 'border-green-600' : 'border-red-600'}`}>
+                            <div className={`w-full h-full rounded-full ${veg ? 'bg-green-600' : 'bg-red-600'}`}></div>
                         </div>
                     </div>
-                    
-                    <div className="flex items-center gap-1 mb-2">
-                        <span className="text-[#FF6B00] text-xs">⭐</span>
-                        <span className="text-[14px] font-semibold text-gray-600">{rating}</span>
+
+                    <div className="flex items-center gap-1 mb-1">
+                        <span className={`text-[#FF6B00] ${compact ? 'text-[10px]' : 'text-xs'}`}>⭐</span>
+                        <span className={`font-semibold text-gray-600 ${compact ? 'text-[11px]' : 'text-[14px]'}`}>{rating}</span>
                     </div>
 
                     <div className="flex flex-col">
                         {discount > 0 && (
-                            <span className="text-[12px] text-gray-400 line-through font-medium">₹{price}</span>
+                            <span className={`text-gray-400 line-through font-medium ${compact ? 'text-[10px]' : 'text-[12px]'}`}>₹{price}</span>
                         )}
-                        <span className="font-bold text-[20px] text-gray-900 leading-tight">₹{discountedPrice}</span>
+                        <span className={`font-bold text-gray-900 leading-tight ${compact ? 'text-[15px]' : 'text-[20px]'}`}>₹{discountedPrice}</span>
                     </div>
                 </div>
 
-                {/* Floating Add Button (Bottom Right) */}
-                <div className="absolute bottom-3 right-3 z-10" onClick={(e) => e.stopPropagation()}>
+                {/* Floating Add / Qty Button */}
+                <div className={`absolute z-10 ${compact ? 'bottom-2 right-2' : 'bottom-3 right-3'}`} onClick={(e) => e.stopPropagation()}>
                     {currentCartQty === 0 ? (
-                        <button 
+                        <button
                             onClick={handleAddClick}
                             disabled={!inStock}
-                            className={`px-4 py-1.5 rounded-lg font-bold text-[14px] shadow-sm transition-all animate-pop ${inStock ? 'bg-[#FF6B00] text-white hover:bg-[#e66000]' : 'bg-gray-200 text-gray-400'}`}
+                            className={`rounded-lg font-bold shadow-sm transition-all ${compact ? 'px-2.5 py-1 text-[11px]' : 'px-4 py-1.5 text-[14px]'} ${inStock ? 'bg-[#FF6B00] text-white hover:bg-[#e66000]' : 'bg-gray-200 text-gray-400'}`}
                         >
                             + ADD
                         </button>
                     ) : (
-                        <div className="flex items-center bg-[#FF6B00] text-white rounded-lg shadow-sm overflow-hidden animate-pop">
-                            <button onClick={handleRemoveFromCart} className="px-3 py-1.5 font-bold hover:bg-[#e66000] transition-colors text-[16px]">−</button>
-                            <span className="px-2 font-bold text-[14px]">{currentCartQty}</span>
-                            <button onClick={handleAddClick} className="px-3 py-1.5 font-bold hover:bg-[#e66000] transition-colors text-[16px]">+</button>
+                        <div className={`flex items-center bg-[#FF6B00] text-white rounded-lg shadow-sm overflow-hidden ${compact ? 'text-[11px]' : 'text-[14px]'}`}>
+                            <button onClick={handleRemoveFromCart} className={`font-bold hover:bg-[#e66000] transition-colors ${compact ? 'px-2 py-0.5 text-[14px]' : 'px-3 py-1.5 text-[16px]'}`}>−</button>
+                            <span className={`font-bold ${compact ? 'px-1.5' : 'px-2'}`}>{currentCartQty}</span>
+                            <button onClick={handleAddClick} className={`font-bold hover:bg-[#e66000] transition-colors ${compact ? 'px-2 py-0.5 text-[14px]' : 'px-3 py-1.5 text-[16px]'}`}>+</button>
                         </div>
                     )}
                 </div>

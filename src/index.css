@@ -83,3 +83,33 @@ a {
 .animate-pop {
   animation: pop 0.3s ease-in-out;
 }
+
+/* Bounce slow for cart badge */
+@keyframes bounce-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 1.4s ease-in-out infinite;
+}
+
+/* FadeInUp for hero text */
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+/* Horizontal row slide-in for mobile cards */
+@keyframes slideInRight {
+  0% { opacity: 0; transform: translateX(20px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+.animate-slideInRight {
+  animation: slideInRight 0.35s ease-out forwards;
+}
